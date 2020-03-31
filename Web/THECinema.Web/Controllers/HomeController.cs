@@ -2,10 +2,10 @@
 {
     using System.Diagnostics;
 
+    using Microsoft.AspNetCore.Mvc;
     using THECinema.Services.Data.Contracts;
     using THECinema.Web.ViewModels;
     using THECinema.Web.ViewModels.Movies;
-    using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : BaseController
     {

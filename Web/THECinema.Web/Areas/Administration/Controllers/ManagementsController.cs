@@ -2,12 +2,12 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Mvc;
     using THECinema.Services.Data.Contracts;
     using THECinema.Web.ViewModels.Halls;
     using THECinema.Web.ViewModels.Managements;
     using THECinema.Web.ViewModels.Movies;
     using THECinema.Web.ViewModels.Projections;
-    using Microsoft.AspNetCore.Mvc;
 
     public class ManagementsController : AdministrationController
     {

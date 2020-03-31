@@ -1,8 +1,8 @@
 ﻿namespace THECinema.Web.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
     using THECinema.Services.Data.Contracts;
     using THECinema.Web.ViewModels.Movies;
-    using Microsoft.AspNetCore.Mvc;
 
     public class MoviesController : BaseController
     {

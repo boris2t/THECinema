@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using THECinema.Services.Data.Contracts;
-    using THECinema.Web.ViewModels.Payments;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using THECinema.Services.Data.Contracts;
+    using THECinema.Web.ViewModels.Payments;
 
     [Authorize]
     public class PaymentsController : BaseController

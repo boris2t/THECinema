@@ -2,9 +2,9 @@
 {
     using System.Linq;
 
+    using Microsoft.AspNetCore.Mvc;
     using THECinema.Services.Data.Contracts;
     using THECinema.Web.ViewModels.Projections;
-    using Microsoft.AspNetCore.Mvc;
 
     public class ProjectionsController : BaseController
     {
