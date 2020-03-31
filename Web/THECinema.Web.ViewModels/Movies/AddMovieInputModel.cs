@@ -30,6 +30,9 @@
         [Display(Name="Trailer Url")]
         public string TrailerUrl { get; set; }
 
+        [Display(Name = "Trailer Video Url")]
+        public string TrailerVideoUrl { get; set; }
+
         [Required]
         [MaxLength(300)]
         public string Actors { get; set; }

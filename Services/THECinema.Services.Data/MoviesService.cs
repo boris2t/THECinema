@@ -38,6 +38,7 @@
                 Price = model.Price,
                 Genre = (MovieGenre)genre,
                 TrailerUrl = model.TrailerUrl,
+                TrailerVideoUrl = model.TrailerVideoUrl,
                 Halls = null,
             };
 

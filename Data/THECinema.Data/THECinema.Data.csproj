@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\THECinema.Services.Data\THECinema.Services.Data.csproj" />
     <ProjectReference Include="..\..\THECinema.Common\THECinema.Common.csproj" />
     <ProjectReference Include="..\THECinema.Data.Common\THECinema.Data.Common.csproj" />
     <ProjectReference Include="..\THECinema.Data.Models\THECinema.Data.Models.csproj" />

@@ -34,6 +34,8 @@
 
         public string TrailerUrl { get; set; }
 
+        public string TrailerVideoUrl { get; set; }
+
         [Required]
         [MaxLength(300)]
         public string Actors { get; set; }

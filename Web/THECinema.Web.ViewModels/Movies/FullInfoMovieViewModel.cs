@@ -19,6 +19,8 @@
 
         public string TrailerUrl { get; set; }
 
+        public string TrailerVideoUrl { get; set; }
+
         public string Actors { get; set; }
 
         public int AgeRestriction { get; set; }
