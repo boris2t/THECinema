@@ -1,0 +1,33 @@
+﻿@model CinemaSystem.Web.ViewModels.Projections.AddProjectionInputModel
+@{
+    this.ViewData["Title"] = "Edit Projection";
+    var movies = Model.Movies.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
+    var halls = Model.Halls.Select(x => new SelectListItem(x.Id.ToString(), x.Id.ToString()));
+}
+
+<div class="col-md-4">
+    <form asp-area="Administration" asp-controller="Managements" asp-action="EditProjection" method="post" class="form">
+
+        <div class="form-group">
+            <label asp-for="HallId"></label>
+            <select asp-for="HallId" asp-items="halls" class="form-control"></select>
+            <span asp-validation-for="HallId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MovieId"></label>
+            <select asp-for="MovieId" asp-items="movies" class="form-control"></select>
+            <span asp-validation-for="MovieId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ProjectionDateTime"></label>
+            <input asp-for="ProjectionDateTime" class="form-control" />
+            <span asp-validation-for="ProjectionDateTime" class="text-danger"></span>
+        </div>
+
+        <hr />
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+        <input type="submit" value="Edit" class="btn btn-primary" />
+    </form>
+</div>

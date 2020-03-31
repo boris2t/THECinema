@@ -1,0 +1,33 @@
+﻿@model CinemaSystem.Web.ViewModels.Halls.AddHallInputModel
+@{
+    this.ViewData["Title"] = "Add a Hall";
+}
+
+
+<div class="col-md-4">
+    <form asp-area="Administration" asp-controller="Halls" asp-action="Add" method="post" class="form">
+
+        <div class="form-group">
+            <label asp-for="ProjectionType"></label>
+            <select asp-for="ProjectionType" class="form-control">
+                <option value="TwoD">2D</option>
+                <option value="ThreeD">3D</option>
+                <option value="FourDx">4Dx</option>
+            </select>
+            <span asp-validation-for="ProjectionType" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Seats"></label>
+            <select asp-for="Seats" class="form-control">
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <span asp-validation-for="Seats" class="text-danger"></span>
+        </div>
+
+        <hr />
+
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </form>
+</div>

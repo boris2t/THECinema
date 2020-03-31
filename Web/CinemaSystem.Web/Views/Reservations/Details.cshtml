@@ -1,0 +1,119 @@
+﻿@model CinemaSystem.Web.ViewModels.Reservations.CombinedReservationViewModel
+@{
+    ViewData["Title"] = "Choose A Seat";
+    int counter = 1;
+}
+
+<link href="~/css/chooseSeat.css" rel="stylesheet" />
+
+<h5>How many seats would you like to save?</h5>
+<div class="row form inputForm">
+    <form>
+        <div class="input-group">
+            <input type="number" id="numseats" class="form-control col col-7 mr-2" value="1">
+            <span class="input-group-btn">
+                <button class="btn btn-info" type="button" onclick="takeData()">Start Selecting</button>
+            </span>
+        </div>
+    </form>
+</div>
+
+<div id="infoBoxContainer">
+    <div class="smallBox greenBox">SELECTED</div>
+    <br />
+    <div class="smallBox emptyBox">FREE</div>
+    <br />
+    <div class="smallBox redBox">RESERVED</div>
+</div>
+
+<div class="screen">SCREEN THIS WAY</div>
+
+<div class="seatStructure">
+    <table id="hall">
+
+        @foreach (var row in Model.ViewModel.Seats.Values)
+        {
+            <tr>
+                @for (int i = 0; i < row.Count() / 2; i++)
+                {
+                    var seat = row[i];
+                    if (seat.IsTaken)
+                    {
+                        <td class="taken">
+                            <label class="checkbox">
+                                <input type="checkbox" disabled="disabled" value="@(Convert.ToChar(65+i))-@counter--@seat.Id">
+                                <span class="taken"></span>
+                            </label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <label class="checkbox">
+                                <input type="checkbox" value="@(Convert.ToChar(65+i))-@counter--@seat.Id">
+                                <span></span>
+                            </label>
+                        </td>
+                    }
+                }
+
+                <td class="separator"></td>
+
+                @for (int i = row.Count() / 2; i < row.Count(); i++)
+                {
+                    var seat = row[i];
+                    if (seat.IsTaken)
+                    {
+                        <td class="taken">
+                            <label class="checkbox">
+                                <input type="checkbox" disabled="disabled" value="@(Convert.ToChar(65+i))-@counter--@seat.Id">
+                                <span class="taken"></span>
+                            </label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <label class="checkbox">
+                                <input type="checkbox" value="@(Convert.ToChar(65+i))-@counter--@seat.Id">
+                                <span></span>
+                            </label>
+                        </td>
+                    }
+                }
+            </tr>
+
+            counter++;
+        }
+    </table>
+</div>
+
+<div class="row form" id="confirmForm">
+    <form asp-controller="Reservations" asp-action="Create">
+        <div class="input-group">
+            <input id="selectedSeats" asp-for="InputModel.SelectedSeats" value="" type="hidden" />
+            <input id="priceReady" asp-for="InputModel.Price" value="" type="hidden" />
+            <input asp-for="InputModel.ProjectionId" value="@Model.ViewModel.ProjectionId" type="hidden" />
+            <input type="text" id="price" class="form-control col col-5 mr-2" placeholder="$0.00" disabled="disabled">
+            <span class="input-group-btn">
+                <input class="btn btn-info" type="submit" value="Confirm" onclick="getChosenSeats()" />
+            </span>
+        </div>
+    </form>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/chooseSeat.js"></script>
+
+<script>
+    function takeData() {
+    if (($("#numseats").val().length == 0)) {
+        alert("Please Enter Number of Seats");
+    } else {
+        $(".inputForm *").prop("disabled", true);
+        $(".seatStructure *").prop("disabled", false);
+        $(".taken *").prop("disabled", true);
+        $("#price").val('$' + (@Model.ViewModel.Movie.Price * ($("#numseats").val())) + '.00');
+    }
+}
+</script>
