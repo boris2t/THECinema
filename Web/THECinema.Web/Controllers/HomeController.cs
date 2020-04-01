@@ -1,5 +1,6 @@
 ﻿namespace THECinema.Web.Controllers
 {
+    using System;
     using System.Diagnostics;
 
     using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,8 @@
 
     public class HomeController : BaseController
     {
+        private const int MoviesPerPage = 10;
+
         private readonly IMoviesService moviesService;
 
         public HomeController(IMoviesService moviesService)
@@ -16,12 +19,21 @@
             this.moviesService = moviesService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
             var viewModel = new IndexSimpleMovieViewModel
             {
-                Movies = this.moviesService.GetAll<SimpleMovieViewModel>(),
+                Movies = this.moviesService.GetAll<SimpleMovieViewModel>(MoviesPerPage, (page - 1) * MoviesPerPage),
             };
+
+            viewModel.CurrentPage = page;
+            var count = this.moviesService.GetMoviesCount();
+            viewModel.PagesCount = (int)Math.Ceiling((double)count / MoviesPerPage);
+
+            if (viewModel.PagesCount == 0)
+            {
+                viewModel.PagesCount = 1;
+            }
 
             return this.View(viewModel);
         }

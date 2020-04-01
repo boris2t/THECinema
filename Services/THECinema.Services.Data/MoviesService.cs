@@ -70,12 +70,19 @@
             await this.moviesRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll<T>()
+        public IEnumerable<T> GetAll<T>(int? take = 0, int skip = 0)
         {
-             return this.moviesRepository
+            var query = this.moviesRepository
                 .All()
-                .To<T>()
-                .ToList();
+                .OrderByDescending(m => m.CreatedOn)
+                .Skip(skip);
+
+            if (take.HasValue)
+            {
+                query = query.Take(take.Value);
+            }
+
+            return query.To<T>().ToList();
         }
 
         public T GetById<T>(int filmId)
@@ -94,6 +101,11 @@
                 .Where(m => m.Name == filmName)
                 .Select(m => m.Id)
                 .FirstOrDefault();
+        }
+
+        public int GetMoviesCount()
+        {
+            return this.moviesRepository.All().Count();
         }
     }
 }

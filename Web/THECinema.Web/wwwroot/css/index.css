@@ -1,0 +1,43 @@
+﻿.pagination > .active > a {
+    background-color: forestgreen !Important;
+}
+
+.pagination {
+    margin-left: 70%;
+}
+
+.movie:hover img {
+    filter: blur(2px) brightness(60%);
+}
+
+.movie h6 {
+    position: absolute;
+    top: 41%;
+    left: 33%;
+    z-index: 1;
+    color: #fff;
+    text-align: center;
+    transition: .3s;
+    opacity: 0;
+    padding: 10px;
+    border: 1px solid orange;
+    border-radius: 5px;
+}
+
+.movie:hover h6 {
+    opacity: 1;
+}
+
+h2 {
+    color: forestgreen;
+}
+
+a {
+    color: black;
+    text-decoration-color: black;
+}
+
+    a:hover, a:visited, a:link, a:active {
+        text-decoration: none;
+        color: black;
+    }
