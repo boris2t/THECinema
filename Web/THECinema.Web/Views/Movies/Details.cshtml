@@ -34,7 +34,7 @@
         <h5>Genre</h5>
         <h7>@Model.Genre</h7>
         <hr />
-        <a href="#trailer" onclick="showTrailer()" id="trailerBtn" class="btn btn-warning">WATCH TRAILER</a>
+        <a href="#trailer" id="trailerBtn" class="btn btn-warning">WATCH TRAILER</a>
         <a href="/Projections/GetById?filmId=@Model.Id" id="bookBtn" class="btn btn-success">BOOK TICKET</a>
     </div>
 </div>
@@ -44,6 +44,8 @@
             src="https://www.youtube.com/embed/@videoId">
     </iframe>
 </div>
+
+
 
 
 <style>
@@ -59,10 +61,6 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 
 <script>
-    //function showTrailer() {
-    //    document.getElementById("trailer").style.display = "block";
-    //}
-
     $("#trailerBtn").click(function () {
         $("#trailer").css("display", "block");
         $('html, body').animate({

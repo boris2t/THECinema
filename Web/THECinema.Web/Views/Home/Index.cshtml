@@ -4,7 +4,7 @@
 }
 
 <div class="text-center">
-    <h4 class="display-4">Choose a Movie!</h4>
+    <h2>Popular movies in THECinema</h2>
 </div>
 
 <hr />
@@ -12,12 +12,52 @@
 <div class="row">
     @foreach (var movie in Model.Movies)
     {
-        <div class="col-md-3 media">
+        <div class="col-md-auto mb-3 media movie">
 
             <a href="/Movies/Details/?filmId=@movie.Id">
                 <img src="@movie.TrailerUrl" />
+                <h6>DETAILS</h6>
                 <h5>@movie.Name</h5>
             </a>
         </div>
     }
 </div>
+
+<style>
+
+    .movie:hover img {
+        filter: blur(2px) brightness(60%);
+    }
+
+    .movie h6 {
+        position: absolute;
+        top: 41%;
+        left: 33%;
+        z-index: 1;
+        color: #fff;
+        text-align: center;
+        transition: .3s;
+        opacity: 0;
+        padding: 10px;
+        border: 1px solid orange;
+        border-radius: 5px;
+    }
+
+    .movie:hover h6{
+        opacity: 1;
+    }
+
+    h2 {
+        color: forestgreen;
+    }
+
+    a {
+        color: black;
+        text-decoration-color: black;
+    }
+
+        a:hover, a:visited, a:link, a:active {
+            text-decoration: none;
+            color: black;
+        }
+</style>
