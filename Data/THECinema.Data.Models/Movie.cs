@@ -5,7 +5,6 @@
     using System.ComponentModel.DataAnnotations;
 
     using THECinema.Data.Common.Models;
-    using THECinema.Data.Models.Enums;
 
     public class Movie : BaseDeletableModel<int>
     {
@@ -49,6 +48,6 @@
 
         public IEnumerable<Projection> Halls { get; set; }
 
-        public MovieGenre Genre { get; set; }
+        public string Genre { get; set; }
     }
 }

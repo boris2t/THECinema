@@ -1,13 +1,11 @@
 ﻿namespace THECinema.Services.Data
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using THECinema.Data.Common.Repositories;
     using THECinema.Data.Models;
-    using THECinema.Data.Models.Enums;
     using THECinema.Services.Data.Contracts;
     using THECinema.Services.Mapping;
     using THECinema.Web.ViewModels.Movies;
@@ -23,8 +21,6 @@
 
         public async Task AddAsync(AddMovieInputModel model)
         {
-            var genre = Enum.Parse(typeof(MovieGenre), model.Genre);
-
             var movie = new Movie
             {
                 Name = model.Name,
@@ -36,7 +32,7 @@
                 Duration = model.Duration,
                 Rating = model.Rating,
                 Price = model.Price,
-                Genre = (MovieGenre)genre,
+                Genre = model.Genre,
                 TrailerUrl = model.TrailerUrl,
                 TrailerVideoUrl = model.TrailerVideoUrl,
                 Halls = null,
@@ -57,8 +53,6 @@
         {
             var movie = await this.moviesRepository.GetByIdWithDeletedAsync(inputModel.Id);
 
-            var genre = Enum.Parse(typeof(MovieGenre), inputModel.Genre);
-
             movie.Name = inputModel.Name;
             movie.Year = inputModel.Year;
             movie.Actors = inputModel.Actors;
@@ -68,7 +62,7 @@
             movie.Duration = inputModel.Duration;
             movie.Rating = inputModel.Rating;
             movie.Price = inputModel.Price;
-            movie.Genre = (MovieGenre)genre;
+            movie.Genre = inputModel.Genre;
             movie.TrailerUrl = inputModel.TrailerUrl;
             movie.TrailerVideoUrl = inputModel.TrailerVideoUrl;
 
