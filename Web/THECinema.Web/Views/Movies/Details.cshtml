@@ -1,6 +1,12 @@
-﻿@model THECinema.Web.ViewModels.Movies.FullInfoMovieViewModel
+﻿@using System.Web
+@model THECinema.Web.ViewModels.Movies.FullInfoMovieViewModel
 @{
     ViewData["Title"] = "Details";
+
+    var url = Model.TrailerVideoUrl;
+    var uri = new Uri(url);
+    var query = HttpUtility.ParseQueryString(uri.Query);
+    var videoId = query["v"];
 }
 <link href="~/css/details.css" rel="stylesheet" asp-append-version="true" />
 
@@ -28,14 +34,14 @@
         <h5>Genre</h5>
         <h7>@Model.Genre</h7>
         <hr />
-        <a href="#trailer" onclick="showTrailer()" class="btn btn-warning">WATCH TRAILER</a>
+        <a href="#trailer" onclick="showTrailer()" id="trailerBtn" class="btn btn-warning">WATCH TRAILER</a>
         <a href="/Projections/GetById?filmId=@Model.Id" id="bookBtn" class="btn btn-success">BOOK TICKET</a>
     </div>
 </div>
 
 <div id="trailer">
     <iframe width="960" height="480"
-            src="https://www.youtube.com/embed/Pb40NLXBHF4">
+            src="https://www.youtube.com/embed/@videoId">
     </iframe>
 </div>
 
@@ -50,8 +56,17 @@
     }
 </style>
 
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
 <script>
-    function showTrailer() {
-        document.getElementById("trailer").style.display = "block";
-    }
+    //function showTrailer() {
+    //    document.getElementById("trailer").style.display = "block";
+    //}
+
+    $("#trailerBtn").click(function () {
+        $("#trailer").css("display", "block");
+        $('html, body').animate({
+            scrollTop: $("#trailer").offset().top
+        }, 500);
+    });
 </script>

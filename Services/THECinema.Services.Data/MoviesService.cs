@@ -70,6 +70,7 @@
             movie.Price = inputModel.Price;
             movie.Genre = (MovieGenre)genre;
             movie.TrailerUrl = inputModel.TrailerUrl;
+            movie.TrailerVideoUrl = inputModel.TrailerVideoUrl;
 
             this.moviesRepository.Update(movie);
             await this.moviesRepository.SaveChangesAsync();
