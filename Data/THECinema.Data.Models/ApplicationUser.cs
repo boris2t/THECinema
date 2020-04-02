@@ -5,9 +5,8 @@ namespace THECinema.Data.Models
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using THECinema.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+    using THECinema.Data.Common.Models;
 
     public class ApplicationUser : IdentityUser, IAuditInfo, IDeletableEntity
     {
@@ -18,6 +17,8 @@ namespace THECinema.Data.Models
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Reservations = new HashSet<Reservation>();
+            this.Reviews = new HashSet<Review>();
+            this.Comments = new HashSet<Comment>();
         }
 
         // Audit info
@@ -41,5 +42,9 @@ namespace THECinema.Data.Models
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }
+
+        public virtual ICollection<Review> Reviews { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

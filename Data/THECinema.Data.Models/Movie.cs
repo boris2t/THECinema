@@ -11,6 +11,7 @@
         public Movie()
         {
             this.Halls = new HashSet<Projection>();
+            this.Reviews = new HashSet<Review>();
         }
 
         [Required]
@@ -46,8 +47,10 @@
 
         public double Price { get; set; }
 
+        public string Genre { get; set; }
+
         public IEnumerable<Projection> Halls { get; set; }
 
-        public string Genre { get; set; }
+        public IEnumerable<Review> Reviews { get; set; }
     }
 }

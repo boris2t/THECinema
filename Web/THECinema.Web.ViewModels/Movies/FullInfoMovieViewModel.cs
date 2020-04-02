@@ -1,7 +1,10 @@
 ﻿namespace THECinema.Web.ViewModels.Movies
 {
+    using System.Collections.Generic;
+
     using THECinema.Data.Models;
     using THECinema.Services.Mapping;
+    using THECinema.Web.ViewModels.Reviews;
 
     public class FullInfoMovieViewModel : IMapFrom<Movie>
     {
@@ -30,5 +33,7 @@
         public double Price { get; set; }
 
         public string Genre { get; set; }
+
+        public IEnumerable<ReviewViewModel> Reviews { get; set; }
     }
 }
