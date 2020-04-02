@@ -9,7 +9,7 @@
     {
         Task AddAsync(AddMovieInputModel inputModel);
 
-        IEnumerable<T> GetAll<T>(int? take = 0, int skip = 0);
+        IEnumerable<T> GetAll<T>(int? take, int skip = 0);
 
         T GetById<T>(int filmId);
 

@@ -25,7 +25,7 @@
             <span>seat</span>
         </div>
         <div class="time">
-            <h2>@Model.DateTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</h2>
+            <h2><time datetime="@Model.DateTime.ToString("O")"></time></h2>
             <span>time</span>
         </div>
 

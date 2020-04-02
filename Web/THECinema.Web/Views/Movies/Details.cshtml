@@ -62,7 +62,7 @@
 
 <script>
     $("#trailerBtn").click(function () {
-        $("#trailer").css("display", "block");
+        $("#trailer").toggle();
         $('html, body').animate({
             scrollTop: $("#trailer").offset().top
         }, 500);

@@ -21,7 +21,7 @@
 
         <div id="projection" class="border col-lg-3 mr-4 mb-4">
             <a href="/Reservations/Details?projectionId=@projection.Id">
-                <h5 id="projectionDateTime">@projection.ProjectionDateTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</h5>
+                <div class="ml-auto mr-auto" id="projectionDateTime"><time datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
                 <p>Projection Type: @projectionType</p>
             </a>
         </div>

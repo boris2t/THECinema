@@ -25,7 +25,7 @@
 
         public IActionResult Add()
         {
-            var movies = this.moviesService.GetAll<MovieDropDownViewModel>();
+            var movies = this.moviesService.GetAll<MovieDropDownViewModel>(null);
             var halls = this.hallsService.GetAll<HallDropDownViewModel>();
             var viewModel = new AddProjectionInputModel
             {

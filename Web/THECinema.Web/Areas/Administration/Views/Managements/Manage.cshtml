@@ -23,7 +23,7 @@
             @foreach (var projection in Model.Projections)
             {
                 <li class="item">
-                    @projection.Movie.Name - @projection.ProjectionDateTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                    @projection.Movie.Name - <time datetime="@projection.ProjectionDateTime.ToString("O")"></time>
                     <a class="fa fa-edit" href="/Administration/Managements/EditProjection?id=@projection.Id"></a>
                     <a class="fa fa-trash-alt" href="/Administration/Managements/DeleteProjection?id=@projection.Id"></a>
                 </li>
@@ -52,20 +52,20 @@
 
     #projections {
         float: left;
-        width: 45%;
-        padding: 30px;
+        width: 49%;
+        padding: 15px;
     }
 
     #movies {
         float: left;
-        width: 30%;
-        padding: 30px;
+        width: 27%;
+        padding: 15px;
     }
 
     #halls {
         float: left;
-        width: 25%;
-        padding: 30px;
+        width: 24%;
+        padding: 15px;
     }
 
     .clearfix::after {

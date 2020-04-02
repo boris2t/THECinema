@@ -70,7 +70,7 @@
             await this.moviesRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<T> GetAll<T>(int? take = 0, int skip = 0)
+        public IEnumerable<T> GetAll<T>(int? take, int skip = 0)
         {
             var query = this.moviesRepository
                 .All()

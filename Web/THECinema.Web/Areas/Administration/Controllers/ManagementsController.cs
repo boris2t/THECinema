@@ -29,7 +29,7 @@
         {
             var viewModel = new ManagementViewModel
             {
-                Movies = this.moviesService.GetAll<SimpleMovieViewModel>(),
+                Movies = this.moviesService.GetAll<SimpleMovieViewModel>(null),
                 Halls = this.hallsService.GetAll<ReservationHallViewModel>(),
                 Projections = this.projectionsService.GetAll<ProjectionViewModel>(),
             };
@@ -78,7 +78,7 @@
         {
             var viewModel = this.projectionsService.GetByProjectionId<AddProjectionInputModel>(id);
             viewModel.ProjectionDateTime = viewModel.ProjectionDateTime.ToLocalTime();
-            viewModel.Movies = this.moviesService.GetAll<MovieDropDownViewModel>();
+            viewModel.Movies = this.moviesService.GetAll<MovieDropDownViewModel>(null);
             viewModel.Halls = this.hallsService.GetAll<HallDropDownViewModel>();
             viewModel.Id = id;
 

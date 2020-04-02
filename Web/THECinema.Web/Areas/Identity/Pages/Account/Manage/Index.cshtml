@@ -15,7 +15,7 @@ else
         @foreach (var reservation in Model.Reservations)
         {
             <li>
-                <h5>@reservation.MovieName - @reservation.DateTime.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</h5>
+                <h5>@reservation.MovieName - <time datetime="@reservation.DateTime.ToString("O")"></time></h5>
                 <h5>Hall Number: @reservation.HallId</h5>
                 <h5>Seats: @reservation.SelectedSeats</h5>
                 <a href="/Reservations/Delete?id=@reservation.Id"><h6>Cancel/Delete</h6></a>
