@@ -30,5 +30,19 @@
             await this.reviewsService.AddAsync(inputModel);
             return this.RedirectToAction("Details", "Movies", new { filmId = inputModel.MovieId });
         }
+
+        public async Task<IActionResult> Delete(int id, int movieId)
+        {
+            await this.reviewsService.DeleteAsync(id);
+            return this.RedirectToAction("Details", "Movies", new { filmId = movieId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(AddReviewInputModel inputModel)
+        {
+            await this.reviewsService.EditAsync(inputModel);
+
+            return this.RedirectToAction("Details", "Movies", new { filmId = inputModel.MovieId });
+        }
     }
 }

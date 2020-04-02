@@ -1,4 +1,5 @@
 ﻿@using System.Web
+@using THECinema.Common
 @model THECinema.Web.ViewModels.Movies.FullInfoMovieViewModel
 @{
     ViewData["Title"] = "Details";
@@ -35,10 +36,10 @@
         <h5>Genre</h5>
         <h7>@Model.Genre</h7>
         <hr />
-        <a href="#trailer" id="trailerBtn" class="btn btn-warning">WATCH TRAILER</a>
+        <a href="#" id="trailerBtn" class="btn btn-warning">WATCH TRAILER</a>
         <a href="/Projections/GetById?filmId=@Model.Id" id="bookBtn" class="btn btn-success">BOOK TICKET</a>
         <hr />
-        <a href="#writeReviewForm" class="btn btn-outline-secondary writeReviewBtn">WRITE REVIEW</a>
+        <a href="#" class="btn btn-outline-secondary writeReviewBtn">WRITE REVIEW</a>
     </div>
 </div>
 
@@ -92,6 +93,27 @@
 
 @foreach (var review in Model.Reviews)
 {
+    <div>
+        <form asp-controller="Reviews" asp-action="Edit" method="post" id="@review.Id" class="editReviewForm" style="display: none">
+
+            <div class="form-group">
+                <label for="Title">Title</label>
+                <input Name="Title" class="form-control" value="@review.Title" />
+            </div>
+            <div class="form-group">
+                <label for="Content">Content</label>
+                <textarea name="Content" id="content" class="form-control">@Html.Raw(review.Content)</textarea>
+            </div>
+            <hr />
+            <input type="hidden" name="MovieId" value="@Model.Id" />
+            <input type="hidden" name="Id" value="@review.Id" />
+            <div>
+                <input type="submit" class="btn btn-success" value="Edit Review" />
+            </div>
+            <hr />
+        </form>
+    </div>
+
     @if (review.Stars == 0)
     {
         review.Stars = 1;
@@ -99,7 +121,10 @@
 
     <div class="card">
         <div class="card-header">
-            @review.ApplicationUserUserName
+            Created by:
+            <strong>@review.ApplicationUserUserName</strong>
+            On
+            <time datetime="@review.CreatedOn.ToString("O")"></time>
             <div class="float-right">
                 @for (int i = 0; i < 5; i++)
                 {
@@ -118,6 +143,15 @@
         <div class="card-body">
             <h5 class="card-title">@review.Title</h5>
             <p class="card-text">@Html.Raw(review.Content)</p>
+            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <a href="/Reviews/Delete?id=@review.Id&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+            }
+
+            @if (this.User.Identity.Name == review.ApplicationUserUserName)
+            {
+                <a href="#" onclick="ShowEditForm(@review.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
+            }
             <a href="#" class="btn btn-outline-success float-right">Comment</a>
         </div>
     </div>
@@ -189,6 +223,14 @@
 </script>
 
 <script>
+
+    function ShowEditForm(id) {
+        $("#" + id).show();
+        $('html, body').animate({
+            scrollTop: $("#" + id).offset().top
+        }, 500);
+    }
+
 
     $(".writeReviewBtn").click(function () {
         $("#writeReviewForm").show();

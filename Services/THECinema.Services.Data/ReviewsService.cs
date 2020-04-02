@@ -34,6 +34,24 @@
             await this.reviewsRepository.SaveChangesAsync();
         }
 
+        public async Task DeleteAsync(int id)
+        {
+            var review = this.reviewsRepository.All().Where(r => r.Id == id).FirstOrDefault();
+            this.reviewsRepository.Delete(review);
+            await this.reviewsRepository.SaveChangesAsync();
+        }
+
+        public async Task EditAsync(AddReviewInputModel inputModel)
+        {
+            var review = await this.reviewsRepository.GetByIdWithDeletedAsync(inputModel.Id);
+
+            review.Title = inputModel.Title;
+            review.Content = inputModel.Content;
+
+            this.reviewsRepository.Update(review);
+            await this.reviewsRepository.SaveChangesAsync();
+        }
+
         public IEnumerable<T> GetAllByMovieId<T>(int movieId)
         {
             return this.reviewsRepository
