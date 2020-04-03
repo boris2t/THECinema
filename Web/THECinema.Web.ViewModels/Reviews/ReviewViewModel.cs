@@ -1,9 +1,11 @@
 ﻿namespace THECinema.Web.ViewModels.Reviews
 {
     using System;
+    using System.Collections.Generic;
 
     using THECinema.Data.Models;
     using THECinema.Services.Mapping;
+    using THECinema.Web.ViewModels.Comments;
 
     public class ReviewViewModel : IMapFrom<Review>
     {
@@ -18,5 +20,7 @@
         public double Stars { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
+        public IEnumerable<CommentViewModel> Comments { get; set; }
     }
 }

@@ -26,3 +26,58 @@
     display: table;
 }
 
+.custom-comment {
+    width: 95%;
+}
+
+.card {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+
+#trailer {
+    margin-left: 6%;
+}
+
+#trailer {
+    display: none;
+}
+
+.checked {
+    color: orange;
+}
+
+.stars:not(:checked) > input {
+    opacity: 0;
+}
+
+.stars:not(:checked) > label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc;
+}
+
+    .stars:not(:checked) > label:before {
+        content: '★ ';
+    }
+
+.stars > input:checked ~ label {
+    color: #ffc700;
+}
+
+.stars:not(:checked) > label:hover,
+.stars:not(:checked) > label:hover ~ label {
+    color: #deb217;
+}
+
+.stars > input:checked + label:hover,
+.stars > input:checked + label:hover ~ label,
+.stars > input:checked ~ label:hover,
+.stars > input:checked ~ label:hover ~ label,
+.stars > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}

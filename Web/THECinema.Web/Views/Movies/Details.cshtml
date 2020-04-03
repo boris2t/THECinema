@@ -36,10 +36,13 @@
         <h5>Genre</h5>
         <h7>@Model.Genre</h7>
         <hr />
-        <a href="#" id="trailerBtn" class="btn btn-warning">WATCH TRAILER</a>
+        <a href="#" onclick="ShowForm('trailer')" class="btn btn-warning">WATCH TRAILER</a>
         <a href="/Projections/GetById?filmId=@Model.Id" id="bookBtn" class="btn btn-success">BOOK TICKET</a>
         <hr />
-        <a href="#" class="btn btn-outline-secondary writeReviewBtn">WRITE REVIEW</a>
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <a href="#" onclick="ShowForm('writeReviewForm')" class="btn btn-outline-secondary">WRITE REVIEW</a>
+        }
     </div>
 </div>
 
@@ -54,7 +57,10 @@
 @if (!Model.Reviews.Any())
 {
     <h5 align="center">There are still no reviews for this movie.</h5>
-    <a align="center" href="#" class="writeReviewBtn"><h5>Be the first one to write a review!</h5></a>
+    @if (this.User.Identity.IsAuthenticated)
+    {
+        <a align="center" href="#" onclick="ShowForm('writeReviewForm')"><h5>Be the first one to write a review!</h5></a>
+    }
 }
 
 <div>
@@ -79,7 +85,7 @@
         </div>
         <div class="form-group">
             <label for="Content">Content</label>
-            <textarea name="Content" id="content" class="form-control"></textarea>
+            <textarea name="Content" class="form-control"></textarea>
         </div>
         <hr />
         <input type="hidden" name="MovieId" value="@Model.Id" />
@@ -102,7 +108,7 @@
             </div>
             <div class="form-group">
                 <label for="Content">Content</label>
-                <textarea name="Content" id="content" class="form-control">@Html.Raw(review.Content)</textarea>
+                <textarea name="Content" class="form-control">@Html.Raw(review.Content)</textarea>
             </div>
             <hr />
             <input type="hidden" name="MovieId" value="@Model.Id" />
@@ -143,74 +149,83 @@
         <div class="card-body">
             <h5 class="card-title">@review.Title</h5>
             <p class="card-text">@Html.Raw(review.Content)</p>
-            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            @if (this.User.Identity.IsAuthenticated)
             {
-                <a href="/Reviews/Delete?id=@review.Id&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
-            }
+                @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                {
+                    <a href="/Reviews/Delete?id=@review.Id&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                }
 
-            @if (this.User.Identity.Name == review.ApplicationUserUserName)
-            {
-                <a href="#" onclick="ShowEditForm(@review.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
+                @if (this.User.Identity.Name == review.ApplicationUserUserName)
+                {
+                    <a href="#" onclick="ShowForm(@review.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
+                }
+                <a href="#" onclick="ShowForm('writeCommentForm')" class="btn btn-outline-success float-right">Comment</a>
             }
-            <a href="#" class="btn btn-outline-success float-right">Comment</a>
         </div>
     </div>
+
+    foreach (var comment in review.Comments)
+    {
+        <div>
+            <form asp-controller="Comments" asp-action="Edit" method="post" id="@comment.Id" class="editCommentForm" style="display: none">
+                <div class="form-group">
+                    <label for="Content">Content</label>
+                    <textarea name="Content" class="form-control">@Html.Raw(comment.Content)</textarea>
+                </div>
+                <hr />
+                <input type="hidden" name="MovieId" value="@Model.Id" />
+                <input type="hidden" name="Id" value="@comment.Id" />
+                <div>
+                    <input type="submit" class="btn btn-success" value="Edit Comment" />
+                </div>
+                <hr />
+            </form>
+        </div>
+
+
+        <div class="card custom-comment float-right">
+            <div class="card-header">
+                Created by:
+                <strong>@comment.ApplicationUserUserName</strong>
+                On
+                <time datetime="@comment.CreatedOn.ToString("O")"></time>
+            </div>
+            <div class="card-body">
+                <p class="card-text">@Html.Raw(comment.Content)</p>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a href="/Comments/Delete?id=@comment.Id&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                    }
+
+                    @if (this.User.Identity.Name == review.ApplicationUserUserName)
+                    {
+                        <a href="#" onclick="ShowForm(@comment.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    }
+
+    <div>
+        <form asp-controller="Comments" asp-action="Add" method="post" id="writeCommentForm" style="display: none">
+            <div class="form-group">
+                <label for="Content">Content</label>
+                <textarea name="Content" class="form-control"></textarea>
+            </div>
+            <hr />
+            <input type="hidden" name="MovieId" value="@Model.Id" />
+            <input type="hidden" name="ReviewId" value="@review.Id" />
+            <div>
+                <input type="submit" class="btn btn-success" value="Add Comment" />
+            </div>
+        </form>
+    </div>
+
 }
-
-
-<style>
-    .card {
-        margin-bottom: 5px;
-        padding-bottom: 5px;
-    }
-
-    #trailer {
-        margin-left: 6%;
-    }
-
-    #trailer {
-        display: none;
-    }
-
-    .checked {
-        color: orange;
-    }
-
-    .stars:not(:checked) > input {
-        opacity: 0;
-    }
-
-    .stars:not(:checked) > label {
-        float: right;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        cursor: pointer;
-        font-size: 30px;
-        color: #ccc;
-    }
-
-        .stars:not(:checked) > label:before {
-            content: '★ ';
-        }
-
-    .stars > input:checked ~ label {
-        color: #ffc700;
-    }
-
-    .stars:not(:checked) > label:hover,
-    .stars:not(:checked) > label:hover ~ label {
-        color: #deb217;
-    }
-
-    .stars > input:checked + label:hover,
-    .stars > input:checked + label:hover ~ label,
-    .stars > input:checked ~ label:hover,
-    .stars > input:checked ~ label:hover ~ label,
-    .stars > label:hover ~ input:checked ~ label {
-        color: #c59b08;
-    }
-</style>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
@@ -220,30 +235,11 @@
         selector: "textarea",
         plugins: ["image paste table link code media"]
     });
-</script>
 
-<script>
-
-    function ShowEditForm(id) {
+    function ShowForm(id) {
         $("#" + id).show();
         $('html, body').animate({
             scrollTop: $("#" + id).offset().top
         }, 500);
     }
-
-
-    $(".writeReviewBtn").click(function () {
-        $("#writeReviewForm").show();
-        $('html, body').animate({
-            scrollTop: $("#writeReviewForm").offset().top
-        }, 500);
-    });
-
-
-    $("#trailerBtn").click(function () {
-        $("#trailer").toggle();
-        $('html, body').animate({
-            scrollTop: $("#trailer").offset().top
-        }, 500);
-    });
 </script>
