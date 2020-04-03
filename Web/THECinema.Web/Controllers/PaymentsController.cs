@@ -7,6 +7,7 @@
     using Microsoft.AspNetCore.Mvc;
     using THECinema.Services.Data.Contracts;
     using THECinema.Web.ViewModels.Payments;
+    using THECinema.Web.ViewModels.Reservations;
 
     [Authorize]
     public class PaymentsController : BaseController
@@ -29,20 +30,27 @@
             await this.reservationsService.MakeSeatsTakenAsync(seatIds, inputModel.ReservationId);
             await this.paymentsService.AddAsync(inputModel);
 
-            this.TempData["reservationId"] = inputModel.ReservationId;
-
             if (inputModel.PaymentType == "Cash")
             {
-                return this.RedirectToAction("ShowTicket");
+                return this.RedirectToAction("ShowTicket", new { reservationId = inputModel.ReservationId });
             }
 
-            return this.View();
+            var viewModel = new SimpleReservationViewModel
+            {
+                ReservationId = inputModel.ReservationId,
+            };
+
+            return this.View(viewModel);
         }
 
-        public async Task<IActionResult> ShowTicket()
+        public async Task<IActionResult> ShowTicket(string reservationId)
         {
-            var reservationId = this.TempData["reservationId"].ToString();
             var viewModel = await this.reservationsService.GetByIdAsync(reservationId);
+            if (viewModel == null)
+            {
+                return this.NotFound();
+            }
+
             return this.View(viewModel);
         }
     }

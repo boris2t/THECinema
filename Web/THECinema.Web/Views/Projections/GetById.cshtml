@@ -3,57 +3,74 @@
     ViewData["Title"] = "Projections";
 }
 
-<h3 id="projectionsTitle">Projections for @Model.Projections.Select(p => p.Movie.Name).FirstOrDefault().ToString()</h3>
+@if (!Model.Projections.Any())
+{
+    <h4 class="sorry" align="center">Sorry, currently we don't have any projections for this movie.</h4>
+    <a href="/"><h5 class="otherMoviesLink" align="center">Check out the other movies!</h5></a>
+}
+else
+{
+    <h3 id="projectionsTitle">Projections for @Model.Projections.Select(p => p.Movie.Name).FirstOrDefault().ToString()</h3>
 
-<div class='row'>
-    @foreach (var projection in Model.Projections)
-    {
-        var projectionType = "2D";
-
-        if (projection.Hall.ProjectionType.ToString() == "ThreeD")
+    <div class='row'>
+        @foreach (var projection in Model.Projections)
         {
-            projectionType = "3D";
-        }
-        else if (projection.Hall.ProjectionType.ToString() == "FourDx")
-        {
-            projectionType = "4Dx";
-        }
+            var projectionType = "2D";
 
-        <div id="projection" class="border col-lg-3 mr-4 mb-4">
-            <a href="/Reservations/Details?projectionId=@projection.Id">
-                <div class="ml-auto mr-auto" id="projectionDateTime"><time datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
-                <p>Projection Type: @projectionType</p>
-            </a>
-        </div>
-    }
-</div>
+            if (projection.Hall.ProjectionType.ToString() == "ThreeD")
+            {
+                projectionType = "3D";
+            }
+            else if (projection.Hall.ProjectionType.ToString() == "FourDx")
+            {
+                projectionType = "4Dx";
+            }
+
+            <div id="projection" class="border col-lg-3 mr-4 mb-4">
+                <a href="/Reservations/Details?projectionId=@projection.Id">
+                    <div class="ml-auto mr-auto" id="projectionDateTime"><time datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                    <p>Projection Type: @projectionType</p>
+                </a>
+            </div>
+        }
+    </div>
+}
+
 
 <style>
-    a{
+    .sorry {
+        color: orange;
+    }
+
+    .otherMoviesLink {
+        color: forestgreen;
+    }
+
+    a {
         text-align: center;
         color: black;
         text-decoration-color: black;
     }
 
-    a:hover, a:visited, a:link, a:active {
-        text-decoration: none;
-        color: black;
-    }
+        a:hover, a:visited, a:link, a:active {
+            text-decoration: none;
+            color: black;
+        }
 
-    #projection{
+    #projection {
         border-radius: 10px;
         background-color: #99ff99;
     }
 
-    #projection:hover{
-        background-color: #00ff00;
-    }
+        #projection:hover {
+            background-color: #00ff00;
+        }
 
-    #projectionsTitle{
+    #projectionsTitle {
         text-align: center;
     }
 
-    #projectionDateTime{
+    #projectionDateTime {
         margin-top: 10px;
     }
 </style>

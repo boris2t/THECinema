@@ -2,7 +2,7 @@
 {
     using System;
     using System.Diagnostics;
-
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using THECinema.Services.Data.Contracts;
     using THECinema.Web.ViewModels;
@@ -44,10 +44,22 @@
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int statusCode)
         {
-            return this.View(
-                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
+            var viewModel = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier,
+                StatusCode = statusCode,
+            };
+
+            if (statusCode == StatusCodes.Status404NotFound)
+            {
+                return this.View("404", viewModel);
+            }
+            else
+            {
+                return this.View(viewModel);
+            }
         }
     }
 }

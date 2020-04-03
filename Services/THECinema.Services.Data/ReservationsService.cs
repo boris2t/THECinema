@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Identity;
     using THECinema.Data.Common.Repositories;
     using THECinema.Data.Models;
     using THECinema.Data.Models.Enums;
@@ -12,7 +13,6 @@
     using THECinema.Web.ViewModels.Halls;
     using THECinema.Web.ViewModels.Movies;
     using THECinema.Web.ViewModels.Reservations;
-    using Microsoft.AspNetCore.Identity;
 
     public class ReservationsService : IReservationsService
     {
@@ -72,6 +72,12 @@
         public async Task<FullInfoReservationViewModel> GetByIdAsync(string reservationId)
         {
             var reservation = await this.reservationsRepository.GetByIdWithDeletedAsync(reservationId);
+
+            if (reservation == null)
+            {
+                return null;
+            }
+
             var projection = await this.projectionsRepository.GetByIdWithDeletedAsync(reservation.ProjectionId);
             var movie = await this.moviesRepository.GetByIdWithDeletedAsync(projection.MovieId);
             var hall = this.hallRepository.All().Where(h => h.Id == projection.HallId).FirstOrDefault();

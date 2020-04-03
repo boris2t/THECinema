@@ -1,6 +1,6 @@
-﻿@{
+﻿@model THECinema.Web.ViewModels.Reservations.SimpleReservationViewModel
+@{
     ViewData["Title"] = "Checkout";
-    TempData.Keep();
 }
 
 <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="~/lib/fontawesome/css/all.css">
 
 <div class="col-md-4 center">
-    <form role="form" class="form" method="post" asp-action="ShowTicket">
+    <form role="form" class="form" asp-controller="Payments" asp-action="ShowTicket" asp-route-reservationId="@Model.ReservationId">
         <div class="form-group">
             <label for="username">Full name (on the card)</label>
             <div class="input-group">

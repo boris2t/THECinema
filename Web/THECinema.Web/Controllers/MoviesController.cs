@@ -21,6 +21,11 @@
         public IActionResult Details(int filmId)
         {
             var viewModel = this.moviesService.GetById<FullInfoMovieViewModel>(filmId);
+            if (viewModel == null)
+            {
+                return this.NotFound();
+            }
+
             viewModel.Reviews = this.reviewsService.GetAllByMovieId<ReviewViewModel>(filmId);
 
             return this.View(viewModel);
@@ -32,7 +37,7 @@
 
             if (id == 0)
             {
-                return this.View("Error");
+                return this.NotFound();
             }
 
             return this.RedirectToAction("Details", new { filmId = id });
