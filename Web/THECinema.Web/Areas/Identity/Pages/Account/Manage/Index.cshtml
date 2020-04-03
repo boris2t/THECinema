@@ -14,13 +14,12 @@ else
     <ul>
         @foreach (var reservation in Model.Reservations)
         {
-            <li>
-                <h5>@reservation.MovieName - <time datetime="@reservation.DateTime.ToString("O")"></time></h5>
-                <h5>Hall Number: @reservation.HallId</h5>
-                <h5>Seats: @reservation.SelectedSeats</h5>
-                <a href="/Reservations/Delete?id=@reservation.Id"><h6>Cancel/Delete</h6></a>
-                <hr />
-            </li>
+        <li class="reservation">
+            <h5>@reservation.MovieName - <time datetime="@reservation.DateTime.ToString("O")"></time></h5>
+            <h5>Hall Number: @reservation.HallId</h5>
+            <a href="/Payments/ShowTicket?reservationId=@reservation.Id"><h6 id="viewTicket">View Ticket</h6></a>
+            <a href="/Reservations/Delete?id=@reservation.Id"><h6 id="delete">Cancel/Delete</h6></a>
+        </li>
         }
     </ul>
 
@@ -28,6 +27,32 @@ else
 
 
 <style>
+    .reservation {
+        width: 50%;
+        padding: 10px;
+        margin-bottom: 5px;
+        border: 2px solid black;
+        border-radius: 10px;
+    }
+
+    #viewTicket {
+        color: forestgreen;
+    }
+
+    #delete {
+        color: red;
+    }
+
+     a {
+        color: black;
+        text-decoration-color: black;
+    }
+
+        a:hover, a:visited, a:link, a:active {
+            text-decoration: none;
+            color: black;
+        }
+
     ul {
         list-style-type: none;
     }
