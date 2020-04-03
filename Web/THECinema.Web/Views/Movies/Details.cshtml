@@ -108,7 +108,7 @@
             </div>
             <div class="form-group">
                 <label for="Content">Content</label>
-                <textarea name="Content" class="form-control">@Html.Raw(review.Content)</textarea>
+                <textarea name="Content" class="form-control">@Html.Raw(review.CleanContent)</textarea>
             </div>
             <hr />
             <input type="hidden" name="MovieId" value="@Model.Id" />
@@ -148,7 +148,7 @@
         </div>
         <div class="card-body">
             <h5 class="card-title">@review.Title</h5>
-            <p class="card-text">@Html.Raw(review.Content)</p>
+            <p class="card-text">@Html.Raw(review.CleanContent)</p>
             @if (this.User.Identity.IsAuthenticated)
             {
                 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
@@ -171,7 +171,7 @@
             <form asp-controller="Comments" asp-action="Edit" method="post" id="@comment.Id" class="editCommentForm" style="display: none">
                 <div class="form-group">
                     <label for="Content">Content</label>
-                    <textarea name="Content" class="form-control">@Html.Raw(comment.Content)</textarea>
+                    <textarea name="Content" class="form-control">@Html.Raw(comment.CleanContent)</textarea>
                 </div>
                 <hr />
                 <input type="hidden" name="MovieId" value="@Model.Id" />
@@ -192,7 +192,7 @@
                 <time datetime="@comment.CreatedOn.ToString("O")"></time>
             </div>
             <div class="card-body">
-                <p class="card-text">@Html.Raw(comment.Content)</p>
+                <p class="card-text">@Html.Raw(comment.CleanContent)</p>
                 @if (this.User.Identity.IsAuthenticated)
                 {
                     @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
@@ -200,7 +200,7 @@
                         <a href="/Comments/Delete?id=@comment.Id&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
                     }
 
-                    @if (this.User.Identity.Name == review.ApplicationUserUserName)
+                    @if (this.User.Identity.Name == comment.ApplicationUserUserName)
                     {
                         <a href="#" onclick="ShowForm(@comment.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
                     }
