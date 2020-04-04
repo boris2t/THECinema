@@ -6,7 +6,7 @@
 
     public interface ICommentsService
     {
-        Task AddAsync(AddCommentInputModel inputModel);
+        Task<CommentViewModel> AddAsync(AddCommentInputModel inputModel);
 
         Task DeleteAsync(int id);
 

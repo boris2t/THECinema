@@ -160,7 +160,7 @@
                 {
                     <a href="#" onclick="ShowForm(@review.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
                 }
-                <a href="#" onclick="ShowForm('writeCommentForm')" class="btn btn-outline-success float-right">Comment</a>
+                <a href="#" onclick="ShowForm('commentForm@(review.Id)')" class="btn btn-outline-success float-right">Comment</a>
             }
         </div>
     </div>
@@ -211,29 +211,36 @@
     }
 
     <div>
-        <form asp-controller="Comments" asp-action="Add" method="post" id="writeCommentForm" style="display: none">
-            <div class="form-group">
-                <label for="Content">Content</label>
-                <textarea name="Content" class="form-control"></textarea>
-            </div>
+        <form method="post" id="commentForm@(review.Id)" style="display: none">
+
+            <textarea name="Content"></textarea>
+
             <hr />
             <input type="hidden" name="MovieId" value="@Model.Id" />
             <input type="hidden" name="ReviewId" value="@review.Id" />
             <div>
-                <input type="submit" class="btn btn-success" value="Add Comment" />
+                @*<input type="submit" class="btn btn-success" value="Add Comment" />*@
+                <button onclick="AddComment('commentForm@(review.Id)', 'commentsDiv@(review.Id)')" class="btn btn-success">Add Comment</button>
             </div>
         </form>
     </div>
 
+    <div id="commentsDiv@(review.Id)"></div>
 }
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<script src="/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
+<script src="~/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
+<script src="~/lib/moment/min/moment-with-locales.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     tinymce.init({
         selector: "textarea",
-        plugins: ["image paste table link code media"]
+        plugins: ["image paste table link code media"],
+        setup: function (editor) {
+            editor.on('change', function () {
+                editor.save();
+            });
+        }
     });
 
     function ShowForm(id) {
@@ -241,5 +248,45 @@
         $('html, body').animate({
             scrollTop: $("#" + id).offset().top
         }, 500);
+    }
+
+    function AddComment(formId, commentId) {
+        event.preventDefault();
+        $("#" + formId).hide();
+
+        var data = $("#" + formId).serialize();
+
+        $.ajax({
+            url: "/Comments/Add",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: "json",
+            data: data,
+            complete: function (data) {
+                var parsedData = JSON.parse(data.responseText)
+                console.log(parsedData);
+                $("#" + commentId).html(
+                    `<div class="card custom-comment float-right">
+                    <div class="card-header">
+                        Created by:
+                        <strong>${parsedData.applicationUserUserName}</strong>
+                        On
+                        <time>${moment(parsedData.createdOn).format("ddd, MMM, D, YYYY, h:mm A")}</time>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">${parsedData.cleanContent}</p>
+                       @if (this.User.Identity.IsAuthenticated)
+                        {
+                            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <a href="/Comments/Delete?id=${parsedData.id}&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                            }
+
+                        }
+                    </div>
+                </div>
+                <div class="clearfix"></div>`);
+            }
+        });
     }
 </script>

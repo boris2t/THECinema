@@ -22,13 +22,14 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddCommentInputModel inputModel)
+        public async Task<ActionResult<CommentViewModel>> Add(AddCommentInputModel inputModel)
         {
             var user = await this.userManager.GetUserAsync(this.User);
             inputModel.ApplicationUserId = user.Id;
 
-            await this.commentsService.AddAsync(inputModel);
-            return this.RedirectToAction("Details", "Movies", new { filmId = inputModel.MovieId });
+            var viewModel = await this.commentsService.AddAsync(inputModel);
+            viewModel.ApplicationUserUserName = user.UserName;
+            return viewModel;
         }
 
         public async Task<IActionResult> Delete(int id, int movieId)
