@@ -90,7 +90,7 @@
         <hr />
         <input type="hidden" name="MovieId" value="@Model.Id" />
         <div>
-            <input type="submit" class="btn btn-success" value="Add Review" />
+            <button onclick="AddReview('writeReviewForm')" class="btn btn-success">Add Review</button>
         </div>
     </form>
 </div>
@@ -100,7 +100,7 @@
 @foreach (var review in Model.Reviews)
 {
     <div>
-        <form asp-controller="Reviews" asp-action="Edit" method="post" id="@review.Id" class="editReviewForm" style="display: none">
+        <form method="post" id="editReviewForm@(review.Id)" style="display: none">
 
             <div class="form-group">
                 <label for="Title">Title</label>
@@ -114,18 +114,20 @@
             <input type="hidden" name="MovieId" value="@Model.Id" />
             <input type="hidden" name="Id" value="@review.Id" />
             <div>
-                <input type="submit" class="btn btn-success" value="Edit Review" />
+                <button onclick="EditReview('editReviewForm@(review.Id)', 'reviewCard@(review.Id)', 'editedReviewDiv@(review.Id)')" class="btn btn-success">Edit Review</button>
             </div>
             <hr />
         </form>
     </div>
+
+    <div id="editedReviewDiv@(review.Id)"></div>
 
     @if (review.Stars == 0)
     {
         review.Stars = 1;
     }
 
-    <div class="card">
+    <div class="card" id="reviewCard@(review.Id)">
         <div class="card-header">
             Created by:
             <strong>@review.ApplicationUserUserName</strong>
@@ -153,12 +155,12 @@
             {
                 @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                 {
-                    <a href="/Reviews/Delete?id=@review.Id&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                    <button onclick="Delete('reviewCard@(review.Id)', '@review.Id', 'review')" class="btn btn-outline-danger float-right ml-1">Delete</button>
                 }
 
                 @if (this.User.Identity.Name == review.ApplicationUserUserName)
                 {
-                    <a href="#" onclick="ShowForm(@review.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
+                    <a href="#" onclick="ShowForm('editReviewForm@(review.Id)')" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
                 }
                 <a href="#" onclick="ShowForm('commentForm@(review.Id)')" class="btn btn-outline-success float-right">Comment</a>
             }
@@ -168,7 +170,7 @@
     foreach (var comment in review.Comments)
     {
         <div>
-            <form asp-controller="Comments" asp-action="Edit" method="post" id="@comment.Id" class="editCommentForm" style="display: none">
+            <form method="post" id="editCommentForm@(comment.Id)" style="display: none">
                 <div class="form-group">
                     <label for="Content">Content</label>
                     <textarea name="Content" class="form-control">@Html.Raw(comment.CleanContent)</textarea>
@@ -177,14 +179,15 @@
                 <input type="hidden" name="MovieId" value="@Model.Id" />
                 <input type="hidden" name="Id" value="@comment.Id" />
                 <div>
-                    <input type="submit" class="btn btn-success" value="Edit Comment" />
+                    <button onclick="EditComment('editCommentForm@(comment.Id)', 'commentCard@(comment.Id)', 'editCommentDiv@(comment.Id)')" class="btn btn-success">Edit Comment</button>
                 </div>
                 <hr />
             </form>
         </div>
 
+        <div id="editCommentDiv@(comment.Id)"></div>
 
-        <div class="card custom-comment float-right">
+        <div class="card custom-comment float-right" id="commentCard@(comment.Id)">
             <div class="card-header">
                 Created by:
                 <strong>@comment.ApplicationUserUserName</strong>
@@ -197,12 +200,12 @@
                 {
                     @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                     {
-                        <a href="/Comments/Delete?id=@comment.Id&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                        <button onclick="Delete('commentCard@(comment.Id)', '@comment.Id', 'comment')" class="btn btn-outline-danger float-right ml-1">Delete</button>
                     }
 
                     @if (this.User.Identity.Name == comment.ApplicationUserUserName)
                     {
-                        <a href="#" onclick="ShowForm(@comment.Id)" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
+                        <a href="#" onclick="ShowForm('editCommentForm@(comment.Id)')" class="btn btn-outline-warning editReviewBtn float-right ml-1">Edit</a>
                     }
                 }
             </div>
@@ -219,7 +222,6 @@
             <input type="hidden" name="MovieId" value="@Model.Id" />
             <input type="hidden" name="ReviewId" value="@review.Id" />
             <div>
-                @*<input type="submit" class="btn btn-success" value="Add Comment" />*@
                 <button onclick="AddComment('commentForm@(review.Id)', 'commentsDiv@(review.Id)')" class="btn btn-success">Add Comment</button>
             </div>
         </form>
@@ -227,6 +229,8 @@
 
     <div id="commentsDiv@(review.Id)"></div>
 }
+
+<div id="reviewsDiv"></div>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/tinymce/tinymce.min.js" type="text/javascript"></script>
@@ -254,6 +258,7 @@
         event.preventDefault();
         $("#" + formId).hide();
 
+        var username = '@this.User.Identity.Name';
         var data = $("#" + formId).serialize();
 
         $.ajax({
@@ -264,9 +269,157 @@
             data: data,
             complete: function (data) {
                 var parsedData = JSON.parse(data.responseText)
-                console.log(parsedData);
-                $("#" + commentId).html(
-                    `<div class="card custom-comment float-right">
+
+                var editbtn = '';
+
+                if (username == parsedData.applicationUserUserName)
+                {
+                    editbtn = `<button onclick="ShowForm('editCommentForm${parsedData.id}')" class="btn btn-outline-warning float-right ml-1">Edit</button>`;
+                }
+
+                $("#" + commentId).append(
+                    `
+                    <form method="post" id="editCommentForm${parsedData.id}" style="display: none">
+                        <div class="form-group">
+                            <label for="Content">Content</label>
+                            <textarea name="Content" class="form-control">${parsedData.cleanContent}</textarea>
+                        </div>
+                        <hr />
+                        <input type="hidden" name="Id" value="${parsedData.id}" />
+                        <div>
+                            <button onclick="EditComment('editCommentForm${parsedData.id}', 'commentCard${parsedData.id}', 'editCommentDiv${parsedData.id}')" class="btn btn-success">Edit Comment</button>
+                        </div>
+                        <hr />
+                    </form>
+
+                    <div class="card custom-comment float-right">
+                    <div class="card-header">
+                        Created by:
+                        <strong>${parsedData.applicationUserUserName}</strong>
+                        On
+                        <time>${moment(parsedData.createdOn).format("ddd, MMM, D, YYYY, h:mm A")}</time>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">${parsedData.cleanContent}</p>
+                       @if (this.User.Identity.IsAuthenticated)
+                        {
+                            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <a href="/Comments/Delete?id=${parsedData.id}&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                            }
+
+                             <text>${editbtn}</text>
+                        }
+                    </div>
+                </div>
+                <div class="clearfix"></div>`);
+            }
+        });
+    }
+
+    function AddReview(formId) {
+        event.preventDefault();
+        $("#" + formId).hide();
+
+        var data = $("#" + formId).serialize();
+        var username = '@this.User.Identity.Name';
+
+        $.ajax({
+            url: "/Reviews/Add",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: "json",
+            data: data,
+            complete: function (data) {
+                var parsedData = JSON.parse(data.responseText)
+                var stars = '';
+
+                for (var i = 0; i < 5; i++)
+                {
+                    if (parsedData.stars > 0)
+                    {
+                        stars += `<span class="fa fa-star checked"></span>`;
+                        parsedData.stars--;
+                    }
+                    else
+                    {
+                        stars += `<span class="fa fa-star"></span>`;
+                    }
+                }
+
+                var editbtn = '';
+
+                if (username == parsedData.applicationUserUserName)
+                {
+                    editbtn = `<button onclick="ShowForm('editReviewForm${parsedData.id}')" class="btn btn-outline-warning float-right ml-1">Edit</button>`;
+                }
+
+                $("#reviewsDiv").append(`
+                    <form method="post" id="editReviewForm${parsedData.id}" style="display: none">
+                    <div class="form-group">
+                    <label for="Title">Title</label>
+                    <input Name="Title" class="form-control" value="${parsedData.title}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Content">Content</label>
+                        <textarea name="Content" class="form-control">${parsedData.cleanContent}</textarea>
+                    </div>
+                    <hr />
+                    <input type="hidden" name="Id" value="${parsedData.id}" />
+                    <div>
+                       <button onclick="EditReview('editReviewForm${parsedData.id}', 'reviewCard${parsedData.id}', 'editedReviewDiv${parsedData.id}')" class="btn btn-success">Edit Review</button>
+                    </div>
+                    <hr />
+                    </form>
+
+                    <div class="card" id="reviewCard${parsedData.id}">
+                    <div class="card-header">
+                        Created by:
+                        <strong>${parsedData.applicationUserUserName}</strong>
+                        On
+                        <time>${moment(parsedData.createdOn).format("ddd, MMM, D, YYYY, h:mm A")}</time>
+                        <div class="float-right">
+                           ${stars}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${parsedData.title}</h5>
+                        <p class="card-text">${parsedData.cleanContent}</p>
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <button onclick="Delete('reviewCard${parsedData.id}', '${parsedData.id}', 'review')" class="btn btn-outline-danger float-right ml-1">Delete</button>
+                            }
+
+                            <text>${editbtn}</text>
+
+                            <a href="#" onclick="ShowForm('commentForm${parsedData.id}')" class="btn btn-outline-success float-right">Comment</a>
+                            }
+                    </div>
+                </div>`);
+
+            }
+        });
+    }
+
+    function EditComment(formId, oldCommentCard, editedCommentDiv) {
+        event.preventDefault();
+        $("#" + formId).hide();
+        $("#" + oldCommentCard).hide();
+
+        var data = $("#" + formId).serialize();
+
+        $.ajax({
+            url: "/Comments/Edit",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: "json",
+            data: data,
+            complete: function (data) {
+                var parsedData = JSON.parse(data.responseText)
+                $("#" + editedCommentDiv).append(
+                `<div class="card custom-comment float-right">
                     <div class="card-header">
                         Created by:
                         <strong>${parsedData.applicationUserUserName}</strong>
@@ -288,5 +441,100 @@
                 <div class="clearfix"></div>`);
             }
         });
+    }
+
+    function EditReview(formId, oldReviewCard, editedReviewDiv) {
+        event.preventDefault();
+        $("#" + formId).hide();
+        $("#" + oldReviewCard).hide();
+
+        var username = '@this.User.Identity.Name';
+        var data = $("#" + formId).serialize();
+
+        $.ajax({
+            url: "/Reviews/Edit",
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: "json",
+            data: data,
+            complete: function (data) {
+                var parsedData = JSON.parse(data.responseText)
+                console.log(parsedData);
+                var stars = '';
+
+                for (var i = 0; i < 5; i++)
+                {
+                    if (parsedData.stars > 0)
+                    {
+                        stars += `<span class="fa fa-star checked"></span>`;
+                        parsedData.stars--;
+                    }
+                    else
+                    {
+                        stars += `<span class="fa fa-star"></span>`;
+                    }
+                }
+
+                var editbtn = '';
+
+                if (username == parsedData.applicationUserUserName)
+                {
+                    editbtn = `<button onclick="ShowForm('editReviewForm${parsedData.id}')" class="btn btn-outline-warning float-right ml-1">Edit</button>`;
+                }
+
+                $("#" + editedReviewDiv).append(
+                `<div class="card" id="reviewCard${parsedData.id}">
+                    <div class="card-header">
+                        Created by:
+                        <strong>${parsedData.applicationUserUserName}</strong>
+                        On
+                        <time>${moment(parsedData.createdOn).format("ddd, MMM, D, YYYY, h:mm A")}</time>
+                        <div class="float-right">
+                           ${stars}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${parsedData.title}</h5>
+                        <p class="card-text">${parsedData.cleanContent}</p>
+                        @if (this.User.Identity.IsAuthenticated)
+                        {
+                            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                            {
+                                <button onclick="Delete('reviewCard${parsedData.id}', '${parsedData.id}', 'review')" class="btn btn-outline-danger float-right ml-1">Delete</button>
+                            }
+
+                            <text>${editbtn}</text>
+
+                            <a href="#" onclick="ShowForm('commentForm${parsedData.id}')" class="btn btn-outline-success float-right">Comment</a>
+                            }
+                    </div>
+                </div>`);
+            }
+        });
+    }
+
+
+    function Delete(cardId, Id, type) {
+        event.preventDefault();
+
+        var data = { id: Id };
+        var route = '/';
+
+        if (type == 'comment') {
+            route = '/Comments/Delete';
+        } else {
+            route = '/Reviews/Delete';
+        }
+
+        $.ajax({
+            url: route,
+            type: "POST",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            dataType: "json",
+            data: data,
+            complete: function () {
+            $("#" + cardId).hide();
+        }
+    });
     }
 </script>

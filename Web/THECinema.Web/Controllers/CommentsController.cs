@@ -32,18 +32,20 @@
             return viewModel;
         }
 
-        public async Task<IActionResult> Delete(int id, int movieId)
+        public async Task<IActionResult> Delete(int id)
         {
             await this.commentsService.DeleteAsync(id);
-            return this.RedirectToAction("Details", "Movies", new { filmId = movieId });
+            return this.Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(AddCommentInputModel inputModel)
+        public async Task<ActionResult<CommentViewModel>> Edit(AddCommentInputModel inputModel)
         {
-            await this.commentsService.EditAsync(inputModel);
+            var user = await this.userManager.GetUserAsync(this.User);
 
-            return this.RedirectToAction("Details", "Movies", new { filmId = inputModel.MovieId });
+            var viewModel = await this.commentsService.EditAsync(inputModel);
+            viewModel.ApplicationUserUserName = user.UserName;
+            return viewModel;
         }
     }
 }

@@ -19,7 +19,7 @@
             this.reviewsRepository = reviewsRepository;
         }
 
-        public async Task AddAsync(AddReviewInputModel inputModel)
+        public async Task<ReviewViewModel> AddAsync(AddReviewInputModel inputModel)
         {
             var review = new Review
             {
@@ -32,6 +32,17 @@
 
             await this.reviewsRepository.AddAsync(review);
             await this.reviewsRepository.SaveChangesAsync();
+
+            var viewModel = new ReviewViewModel
+            {
+                Id = review.Id,
+                Title = review.Title,
+                Content = review.Content,
+                Stars = review.Stars,
+                CreatedOn = review.CreatedOn,
+            };
+
+            return viewModel;
         }
 
         public async Task DeleteAsync(int id)
@@ -41,7 +52,7 @@
             await this.reviewsRepository.SaveChangesAsync();
         }
 
-        public async Task EditAsync(AddReviewInputModel inputModel)
+        public async Task<ReviewViewModel> EditAsync(AddReviewInputModel inputModel)
         {
             var review = await this.reviewsRepository.GetByIdWithDeletedAsync(inputModel.Id);
 
@@ -50,6 +61,17 @@
 
             this.reviewsRepository.Update(review);
             await this.reviewsRepository.SaveChangesAsync();
+
+            var viewModel = new ReviewViewModel
+            {
+                Id = review.Id,
+                Title = review.Title,
+                Content = review.Content,
+                CreatedOn = review.CreatedOn,
+                Stars = review.Stars,
+            };
+
+            return viewModel;
         }
 
         public IEnumerable<T> GetAllByMovieId<T>(int movieId)

@@ -6,7 +6,6 @@
     using THECinema.Data.Common.Repositories;
     using THECinema.Data.Models;
     using THECinema.Services.Data.Contracts;
-    using THECinema.Services.Mapping;
     using THECinema.Web.ViewModels.Comments;
 
     public class CommentsService : ICommentsService
@@ -47,13 +46,22 @@
             await this.commentsRepository.SaveChangesAsync();
         }
 
-        public async Task EditAsync(AddCommentInputModel inputModel)
+        public async Task<CommentViewModel> EditAsync(AddCommentInputModel inputModel)
         {
             var comment = await this.commentsRepository.GetByIdWithDeletedAsync(inputModel.Id);
             comment.Content = inputModel.Content;
 
             this.commentsRepository.Update(comment);
             await this.commentsRepository.SaveChangesAsync();
+
+            var viewModel = new CommentViewModel
+            {
+                Id = comment.Id,
+                Content = comment.Content,
+                CreatedOn = comment.CreatedOn,
+            };
+
+            return viewModel;
         }
     }
 }

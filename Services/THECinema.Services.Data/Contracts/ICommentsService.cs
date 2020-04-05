@@ -10,6 +10,6 @@
 
         Task DeleteAsync(int id);
 
-        Task EditAsync(AddCommentInputModel inputModel);
+        Task<CommentViewModel> EditAsync(AddCommentInputModel inputModel);
     }
 }

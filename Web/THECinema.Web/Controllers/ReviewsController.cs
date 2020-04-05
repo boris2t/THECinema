@@ -22,27 +22,30 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddReviewInputModel inputModel)
+        public async Task<ActionResult<ReviewViewModel>> Add(AddReviewInputModel inputModel)
         {
             var user = await this.userManager.GetUserAsync(this.User);
             inputModel.ApplicationUserId = user.Id;
 
-            await this.reviewsService.AddAsync(inputModel);
-            return this.RedirectToAction("Details", "Movies", new { filmId = inputModel.MovieId });
+            var viewModel = await this.reviewsService.AddAsync(inputModel);
+            viewModel.ApplicationUserUserName = user.UserName;
+            return viewModel;
         }
 
-        public async Task<IActionResult> Delete(int id, int movieId)
+        public async Task<IActionResult> Delete(int id)
         {
             await this.reviewsService.DeleteAsync(id);
-            return this.RedirectToAction("Details", "Movies", new { filmId = movieId });
+            return this.Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(AddReviewInputModel inputModel)
+        public async Task<ActionResult<ReviewViewModel>> Edit(AddReviewInputModel inputModel)
         {
-            await this.reviewsService.EditAsync(inputModel);
+            var user = await this.userManager.GetUserAsync(this.User);
 
-            return this.RedirectToAction("Details", "Movies", new { filmId = inputModel.MovieId });
+            var viewModel = await this.reviewsService.EditAsync(inputModel);
+            viewModel.ApplicationUserUserName = user.UserName;
+            return viewModel;
         }
     }
 }

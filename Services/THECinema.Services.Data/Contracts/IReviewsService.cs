@@ -7,12 +7,12 @@
 
     public interface IReviewsService
     {
-        Task AddAsync(AddReviewInputModel inputModel);
+        Task<ReviewViewModel> AddAsync(AddReviewInputModel inputModel);
 
         IEnumerable<T> GetAllByMovieId<T>(int movieId);
 
         Task DeleteAsync(int id);
 
-        Task EditAsync(AddReviewInputModel inputModel);
+        Task<ReviewViewModel> EditAsync(AddReviewInputModel inputModel);
     }
 }
