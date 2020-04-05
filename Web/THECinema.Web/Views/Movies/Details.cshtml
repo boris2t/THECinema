@@ -56,11 +56,13 @@
 
 @if (!Model.Reviews.Any())
 {
-    <h5 align="center">There are still no reviews for this movie.</h5>
-    @if (this.User.Identity.IsAuthenticated)
-    {
-        <a align="center" href="#" onclick="ShowForm('writeReviewForm')"><h5>Be the first one to write a review!</h5></a>
-    }
+    <div id="noReviews">
+        <h5 align="center">There are still no reviews for this movie.</h5>
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            <a align="center" href="#" onclick="ShowForm('writeReviewForm')"><h5>Be the first one to write a review!</h5></a>
+        }
+    </div>
 }
 
 <div>
@@ -292,7 +294,9 @@
                         <hr />
                     </form>
 
-                    <div class="card custom-comment float-right">
+                    <div id="editCommentDiv${parsedData.id}"></div>
+
+                    <div class="card custom-comment float-right" id="commentCard${parsedData.id}">
                     <div class="card-header">
                         Created by:
                         <strong>${parsedData.applicationUserUserName}</strong>
@@ -305,7 +309,7 @@
                         {
                             @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                             {
-                                <a href="/Comments/Delete?id=${parsedData.id}&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                                <button onclick="Delete('commentCard${parsedData.id}', '${parsedData.id}', 'comment')" class="btn btn-outline-danger float-right ml-1">Delete</button>
                             }
 
                              <text>${editbtn}</text>
@@ -320,6 +324,7 @@
     function AddReview(formId) {
         event.preventDefault();
         $("#" + formId).hide();
+        $("#noReviews").hide();
 
         var data = $("#" + formId).serialize();
         var username = '@this.User.Identity.Name';
@@ -372,6 +377,8 @@
                     <hr />
                     </form>
 
+                    <div id="editedReviewDiv${parsedData.id}"></div>
+
                     <div class="card" id="reviewCard${parsedData.id}">
                     <div class="card-header">
                         Created by:
@@ -397,7 +404,20 @@
                             <a href="#" onclick="ShowForm('commentForm${parsedData.id}')" class="btn btn-outline-success float-right">Comment</a>
                             }
                     </div>
-                </div>`);
+                </div>
+
+                <div>
+                <form method="post" id="commentForm${parsedData.id}" style="display: none">
+                    <textarea name="Content"></textarea>
+                    <hr />
+                    <input type="hidden" name="ReviewId" value="${parsedData.id}" />
+                    <div>
+                        <button onclick="AddComment('commentForm${parsedData.id}', 'commentsDiv${parsedData.id}')" class="btn btn-success">Add Comment</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="commentsDiv${parsedData.id}"></div>`);
 
             }
         });
@@ -408,6 +428,7 @@
         $("#" + formId).hide();
         $("#" + oldCommentCard).hide();
 
+        var username = '@this.User.Identity.Name';
         var data = $("#" + formId).serialize();
 
         $.ajax({
@@ -418,8 +439,16 @@
             data: data,
             complete: function (data) {
                 var parsedData = JSON.parse(data.responseText)
+
+                var editbtn = '';
+
+                if (username == parsedData.applicationUserUserName)
+                {
+                    editbtn = `<button onclick="ShowForm('editCommentForm${parsedData.id}')" class="btn btn-outline-warning float-right ml-1">Edit</button>`;
+                }
+
                 $("#" + editedCommentDiv).append(
-                `<div class="card custom-comment float-right">
+                `<div class="card custom-comment float-right" id="commentCard${parsedData.id}">
                     <div class="card-header">
                         Created by:
                         <strong>${parsedData.applicationUserUserName}</strong>
@@ -432,9 +461,9 @@
                         {
                             @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
                             {
-                                <a href="/Comments/Delete?id=${parsedData.id}&movieId=@Model.Id" class="btn btn-outline-danger float-right ml-1">Detele</a>
+                                <button onclick="Delete('commentCard${parsedData.id}', '${parsedData.id}', 'comment')" class="btn btn-outline-danger float-right ml-1">Delete</button>
                             }
-
+                           <text>${editbtn}</text>
                         }
                     </div>
                 </div>
