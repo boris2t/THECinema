@@ -2,12 +2,14 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using THECinema.Data.Models;
     using THECinema.Services.Data.Contracts;
     using THECinema.Web.ViewModels.Reviews;
 
+    [Authorize]
     public class ReviewsController : BaseController
     {
         private readonly IReviewsService reviewsService;
