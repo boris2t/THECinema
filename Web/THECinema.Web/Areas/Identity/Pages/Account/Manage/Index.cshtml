@@ -16,8 +16,6 @@ else
         {
         <li class="reservation">
             <h5>@reservation.MovieName - <time datetime="@reservation.DateTime.ToString("O")"></time></h5>
-            <h5>Hall Number: @reservation.HallId</h5>
-            <a href="/Payments/ShowTicket?reservationId=@reservation.Id"><h6 id="viewTicket">View Ticket</h6></a>
             <a href="/Reservations/Delete?id=@reservation.Id"><h6 id="delete">Cancel/Delete</h6></a>
         </li>
         }

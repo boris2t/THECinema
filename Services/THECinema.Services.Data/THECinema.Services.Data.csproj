@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\THECinema.Data.Common\THECinema.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\THECinema.Data.Models\THECinema.Data.Models.csproj" />
+    <ProjectReference Include="..\..\THECinema.Common\THECinema.Common.csproj" />
     <ProjectReference Include="..\..\Web\THECinema.Web.ViewModels\THECinema.Web.ViewModels.csproj" />
     <ProjectReference Include="..\THECinema.Services.Mapping\THECinema.Services.Mapping.csproj" />
   </ItemGroup>

@@ -24,5 +24,7 @@
         Task MakeSeatsFreeAsync(IEnumerable<string> seatIds);
 
         ParseReservationDataModel ParseData(string priceInput, string seatsInput);
+
+        string GenerateEmailContent(FullInfoReservationViewModel viewModel);
     }
 }

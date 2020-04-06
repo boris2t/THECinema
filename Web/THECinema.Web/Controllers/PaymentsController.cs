@@ -64,15 +64,7 @@
             }
 
             var customer = await this.userManager.GetUserAsync(this.User);
-            var content = @$"<h3>A new reservation has been made!</h3>
-                            <p>Name: {viewModel.UserName}</p>
-                            <p>Movie: {viewModel.MovieName}</p>
-                            <p>Time: {viewModel.DateTime}</p>
-                            <p>Seats: {viewModel.SelectedSeats}</p>
-                            <p>Hall number: {viewModel.HallId}</p>
-                            <p>Projection Type: {viewModel.ProjectionType}</p>
-                            <p>Price: {viewModel.Price.ToString("f2")}</p>
-                            <p>Thank you for making a reservation at {GlobalConstants.SystemName}. We hope you enjoy the movie and see you soon!</p>";
+            var content = this.reservationsService.GenerateEmailContent(viewModel);
 
             await this.emailSender.SendEmailAsync(
                 GlobalConstants.SystemEmail,

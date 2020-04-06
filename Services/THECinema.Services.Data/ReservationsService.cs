@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
+    using THECinema.Common;
     using THECinema.Data.Common.Repositories;
     using THECinema.Data.Models;
     using THECinema.Data.Models.Enums;
@@ -67,6 +68,19 @@
             var reservation = this.reservationsRepository.All().Where(r => r.Id == id).FirstOrDefault();
             this.reservationsRepository.Delete(reservation);
             await this.reservationsRepository.SaveChangesAsync();
+        }
+
+        public string GenerateEmailContent(FullInfoReservationViewModel viewModel)
+        {
+            return @$"<h3>A new reservation has been made!</h3>
+                        <h5>Name: {viewModel.UserName}</h5>
+                        <h5>Movie: {viewModel.MovieName}</h5>
+                        <h5>Time: {viewModel.DateTime}</h5>
+                        <h5>Seats: {viewModel.SelectedSeats}</h5>
+                        <h5>Hall number: {viewModel.HallId}</h5>
+                        <h5>Projection Type: {viewModel.ProjectionType}</h5>
+                        <h5>Price: ${viewModel.Price.ToString("f2")}</h5>
+                        <h4>Thank you for making a reservation at {GlobalConstants.SystemName}. We hope you enjoy the movie and see you soon!</h4>";
         }
 
         public async Task<FullInfoReservationViewModel> GetByIdAsync(string reservationId)
