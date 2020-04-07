@@ -28,9 +28,11 @@
         public string Director { get; set; }
 
         [Display(Name="Trailer Url")]
+        [Required]
         public string TrailerUrl { get; set; }
 
         [Display(Name = "Trailer Video Url")]
+        [Required]
         public string TrailerVideoUrl { get; set; }
 
         [Required]
@@ -46,6 +48,7 @@
 
         public double Price { get; set; }
 
+        [Required]
         public string Genre { get; set; }
     }
 }

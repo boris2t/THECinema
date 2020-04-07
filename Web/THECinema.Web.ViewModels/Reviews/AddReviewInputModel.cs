@@ -10,9 +10,11 @@
         public int Id { get; set; }
 
         [Required]
+        [MinLength(5)]
         public string Title { get; set; }
 
         [Required]
+        [MaxLength(1500)]
         public string Content { get; set; }
 
         public double Stars { get; set; }

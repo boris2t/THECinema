@@ -9,6 +9,7 @@
 
     public class AddProjectionInputModel : IMapTo<Projection>, IMapFrom<Projection>
     {
+        [Required]
         public string Id { get; set; }
 
         [Display(Name = "Hall")]
