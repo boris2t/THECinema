@@ -3,74 +3,130 @@
     ViewData["Title"] = "Projections";
 }
 
-@if (!Model.Projections.Any())
+<link href="~/css/projections.css" rel="stylesheet" asp-append-version="true"/>
+
+@if (!Model.AllProjections.Any())
 {
     <h4 class="sorry" align="center">Sorry, currently we don't have any projections for this movie.</h4>
     <a href="/"><h5 class="otherMoviesLink" align="center">Check out the other movies!</h5></a>
 }
 else
 {
-    <h3 id="projectionsTitle">Projections for @Model.Projections.Select(p => p.Movie.Name).FirstOrDefault().ToString()</h3>
+    <h3 id="projectionsTitle">Projections for @Model.AllProjections.Select(p => p.Movie.Name).FirstOrDefault().ToString()</h3>
 
-    <div class='row'>
-        @foreach (var projection in Model.Projections)
-        {
-            var projectionType = "2D";
-
-            if (projection.Hall.ProjectionType.ToString() == "ThreeD")
-            {
-                projectionType = "3D";
-            }
-            else if (projection.Hall.ProjectionType.ToString() == "FourDx")
-            {
-                projectionType = "4Dx";
-            }
-
-            <div id="projection" class="border col-lg-3 mr-4 mb-4">
-                <a href="/Reservations/Details?projectionId=@projection.Id">
-                    <div class="ml-auto mr-auto" id="projectionDateTime"><time datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
-                    <p>Projection Type: @projectionType</p>
-                </a>
-            </div>
-        }
+    <div class="clearfix">
+        <div class="box" id="Monday">
+            <h4 align="center">Monday</h4>
+            <ul>
+                @foreach (var projection in Model.MondayProjections.OrderBy(p => p.ProjectionDateTime.TimeOfDay))
+                {
+                    <li class="item">
+                        <div class="projection">
+                            <a href="/Reservations/Details?projectionId=@projection.Id">
+                                <div class="ml-auto mr-auto mt-1" id="projectionDateTime"><time class="projectionTime" datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                                <p>Type: @projection.Type</p>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="box" id="Tuesday">
+            <h4 align="center">Tuesday</h4>
+            <ul>
+                @foreach (var projection in Model.TuesDayProjections.OrderBy(p => p.ProjectionDateTime.TimeOfDay))
+                {
+                    <li class="item">
+                        <div class="projection">
+                            <a href="/Reservations/Details?projectionId=@projection.Id">
+                                <div class="ml-auto mr-auto mt-1" id="projectionDateTime"><time class="projectionTime" datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                                <p>Type: @projection.Type</p>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="box" id="Wednesday">
+            <h4 align="center">Wednesday</h4>
+            <ul>
+                @foreach (var projection in Model.WednesdayProjections.OrderBy(p => p.ProjectionDateTime.TimeOfDay))
+                {
+                    <li class="item">
+                        <div class="projection">
+                            <a href="/Reservations/Details?projectionId=@projection.Id">
+                                <div class="ml-auto mr-auto mt-1" id="projectionDateTime"><time class="projectionTime" datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                                <p>Type: @projection.Type</p>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="box" id="Thursday">
+            <h4 align="center">Thursday</h4>
+            <ul>
+                @foreach (var projection in Model.ThursdayProjections.OrderBy(p => p.ProjectionDateTime.TimeOfDay))
+                {
+                    <li class="item">
+                        <div class="projection">
+                            <a href="/Reservations/Details?projectionId=@projection.Id">
+                                <div class="ml-auto mr-auto mt-1" id="projectionDateTime"><time class="projectionTime" datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                                <p>Type: @projection.Type</p>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="box" id="Friday">
+            <h4 align="center">Friday</h4>
+            <ul>
+                @foreach (var projection in Model.FridayProjections.OrderBy(p => p.ProjectionDateTime.TimeOfDay))
+                {
+                    <li class="item">
+                        <div class="projection">
+                            <a href="/Reservations/Details?projectionId=@projection.Id">
+                                <div class="ml-auto mr-auto mt-1" id="projectionDateTime"><time class="projectionTime" datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                                <p>Type: @projection.Type</p>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="box" id="Saturday">
+            <h4 align="center">Saturday</h4>
+            <ul>
+                @foreach (var projection in Model.SaturdayProjections.OrderBy(p => p.ProjectionDateTime.TimeOfDay))
+                {
+                    <li class="item">
+                        <div class="projection">
+                            <a href="/Reservations/Details?projectionId=@projection.Id">
+                                <div class="ml-auto mr-auto mt-1" id="projectionDateTime"><time class="projectionTime" datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                                <p>Type: @projection.Type</p>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="box" id="Sunday">
+            <h4 align="center">Sunday</h4>
+            <ul>
+                @foreach (var projection in Model.SundayProjections.OrderBy(p => p.ProjectionDateTime.TimeOfDay))
+                {
+                    <li class="item">
+                        <div class="projection">
+                            <a href="/Reservations/Details?projectionId=@projection.Id">
+                                <div class="ml-auto mr-auto mt-1" id="projectionDateTime"><time class="projectionTime" datetime="@projection.ProjectionDateTime.ToString("O")"></time></div>
+                                <p>Type: @projection.Type</p>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
     </div>
+
 }
-
-
-<style>
-    .sorry {
-        color: orange;
-    }
-
-    .otherMoviesLink {
-        color: forestgreen;
-    }
-
-    a {
-        text-align: center;
-        color: black;
-        text-decoration-color: black;
-    }
-
-        a:hover, a:visited, a:link, a:active {
-            text-decoration: none;
-            color: black;
-        }
-
-    #projection {
-        border-radius: 10px;
-        background-color: #99ff99;
-    }
-
-        #projection:hover {
-            background-color: #00ff00;
-        }
-
-    #projectionsTitle {
-        text-align: center;
-    }
-
-    #projectionDateTime {
-        margin-top: 10px;
-    }
-</style>

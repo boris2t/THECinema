@@ -1,0 +1,67 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+.box {
+    float: left;
+    width: 13.28%;
+    padding: 15px;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-right: 2px;
+    background-color: #f2f2f2;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.sorry {
+    color: #f0ad4e;
+}
+
+.otherMoviesLink {
+    color: forestgreen;
+}
+
+a {
+    text-align: center;
+    color: black;
+    text-decoration-color: black;
+}
+
+    a:hover, a:visited, a:link, a:active {
+        text-decoration: none;
+        color: black;
+    }
+
+h4 {
+    margin-bottom: 25px;
+}
+
+.projection {
+    border: 2px solid #f0ad4e;
+    border-radius: 8px;
+    margin-left: -32px;
+    margin-bottom: 5px;
+    width: 100px;
+    background-color: white;
+}
+
+    .projection:hover {
+        background-color: #f0ad4e;
+    }
+
+    .projection a:hover {
+        color: white;
+    }
+
+#projectionsTitle {
+    text-align: center;
+}

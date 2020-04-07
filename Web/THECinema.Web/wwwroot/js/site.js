@@ -10,3 +10,16 @@
         $(e).attr("title", $(e).attr("datetime"));
     });
 });
+
+$(function () {
+    $(".projectionTime").each(function (i, e) {
+        const dateTimeValue = $(e).attr("datetime");
+        if (!dateTimeValue) {
+            return;
+        }
+
+        const time = moment.utc(dateTimeValue).local();
+        $(e).html(time.format("hh:mm A"));
+        $(e).attr("title", $(e).attr("datetime"));
+    });
+});
