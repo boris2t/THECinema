@@ -1,5 +1,6 @@
 ﻿namespace THECinema.Services.Data
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -42,6 +43,12 @@
         public async Task DeleteAsync(int id)
         {
             var comment = this.commentsRepository.All().Where(c => c.Id == id).FirstOrDefault();
+
+            if (comment == null)
+            {
+                throw new ArgumentNullException("Comment doesn't exist!");
+            }
+
             this.commentsRepository.Delete(comment);
             await this.commentsRepository.SaveChangesAsync();
         }
@@ -49,6 +56,12 @@
         public async Task<CommentViewModel> EditAsync(AddCommentInputModel inputModel)
         {
             var comment = await this.commentsRepository.GetByIdWithDeletedAsync(inputModel.Id);
+
+            if (comment == null)
+            {
+                throw new ArgumentNullException("Comment doesn't exist!");
+            }
+
             comment.Content = inputModel.Content;
 
             this.commentsRepository.Update(comment);
