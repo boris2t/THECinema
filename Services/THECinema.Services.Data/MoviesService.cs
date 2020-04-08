@@ -1,5 +1,6 @@
 ﻿namespace THECinema.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -45,6 +46,12 @@
         public async Task DeleteAsync(int filmId)
         {
             var movie = this.moviesRepository.All().Where(m => m.Id == filmId).FirstOrDefault();
+
+            if (movie == null)
+            {
+                throw new ArgumentNullException("Movie doesn't exist!");
+            }
+
             this.moviesRepository.Delete(movie);
             await this.moviesRepository.SaveChangesAsync();
         }
@@ -52,6 +59,11 @@
         public async Task EditAsync(AddMovieInputModel inputModel)
         {
             var movie = await this.moviesRepository.GetByIdWithDeletedAsync(inputModel.Id);
+
+            if (movie == null)
+            {
+                throw new ArgumentNullException("Movie doesn't exist!");
+            }
 
             movie.Name = inputModel.Name;
             movie.Year = inputModel.Year;
