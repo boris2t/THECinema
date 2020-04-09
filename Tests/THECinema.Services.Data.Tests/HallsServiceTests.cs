@@ -17,6 +17,7 @@
     public class HallsServiceTests
     {
         private readonly AddHallInputModel hall;
+        private readonly DbContextOptionsBuilder<ApplicationDbContext> options;
 
         public HallsServiceTests()
         {
@@ -27,14 +28,14 @@
             };
 
             AutoMapperConfig.RegisterMappings(typeof(TestHallViewModel).Assembly);
+            this.options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
         }
 
         [Fact]
         public async Task AddHallShouldAddCorrectCount()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             await service.AddAsync(this.hall);
@@ -44,9 +45,7 @@
         [Fact]
         public async Task AddHallShouldAddCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             await service.AddAsync(this.hall);
@@ -59,9 +58,7 @@
         [Fact]
         public async Task DeleteHallShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             await service.AddAsync(this.hall);
@@ -75,9 +72,7 @@
         [Fact]
         public void DeleteHallShouldThrowIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             Assert.Throws<ArgumentNullException>(() => service.DeleteAsync(1).GetAwaiter().GetResult());
@@ -86,9 +81,7 @@
         [Fact]
         public async Task GetAllShouldReturnCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             await service.AddAsync(this.hall);
@@ -103,9 +96,7 @@
         [Fact]
         public void GetAllShouldReturnEmptyList()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             var result = service.GetAll<TestHallViewModel>();
@@ -116,9 +107,7 @@
         [Fact]
         public async Task GetByIdShouldReturnCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             var diffHall = new AddHallInputModel
@@ -138,9 +127,7 @@
         [Fact]
         public void GetByIdShouldReturnNullIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(this.options.Options));
             var service = new HallsService(repository);
 
             var result = service.GetById<TestHallViewModel>(2);

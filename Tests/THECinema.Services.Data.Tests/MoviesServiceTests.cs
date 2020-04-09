@@ -19,6 +19,7 @@
     public class MoviesServiceTests
     {
         private readonly AddMovieInputModel movie;
+        private readonly DbContextOptionsBuilder<ApplicationDbContext> options;
 
         public MoviesServiceTests()
         {
@@ -38,14 +39,14 @@
                 TrailerVideoUrl = "url",
             };
             AutoMapperConfig.RegisterMappings(typeof(TestMovieViewModel).Assembly);
+            this.options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
         }
 
         [Fact]
         public async Task AddMovieShouldAddCorrectCount()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);
@@ -55,9 +56,7 @@
         [Fact]
         public async Task AddMovieShouldAddCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);
@@ -95,9 +94,7 @@
         [Fact]
         public async Task GetIdByNameShouldReturnTheCorrectId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);
@@ -111,9 +108,7 @@
         [InlineData("")]
         public void GetIdByNameShouldReturn0(string name)
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             Assert.Equal(0, service.GetIdByName(name));
@@ -122,9 +117,7 @@
         [Fact]
         public async Task GetByIdShouldReturnTheCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);
@@ -140,9 +133,7 @@
         [Fact]
         public void GetByIdShouldReturnNull()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             var result = service.GetById<TestMovieViewModel>(5);
@@ -153,9 +144,7 @@
         [Fact]
         public async Task GetAllShouldReturnCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);
@@ -170,9 +159,7 @@
         [Fact]
         public async Task GetAllShouldReturnOneModelWithTakeParameterBeeing1()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);
@@ -187,9 +174,7 @@
         [Fact]
         public async Task GetAllShouldWorkCorrectlyWithAllParametersFilled()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             var diffMovie = new AddMovieInputModel
@@ -221,9 +206,7 @@
         [Fact]
         public async Task EditMovieShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             var diffMovie = new AddMovieInputModel
@@ -254,9 +237,7 @@
         [Fact]
         public async Task EditMovieShouldThrowIfIdIsNotFound()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             var diffMovie = new AddMovieInputModel
@@ -284,9 +265,7 @@
         [Fact]
         public async Task DeleteMovieShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);
@@ -300,9 +279,7 @@
         [Fact]
         public async Task DeleteMovieShouldThrowWithIncorrectId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(this.options.Options));
             var service = new MoviesService(repository);
 
             await service.AddAsync(this.movie);

@@ -15,6 +15,7 @@
     public class CommentsServiceTests
     {
         private readonly AddCommentInputModel comment;
+        private readonly DbContextOptionsBuilder<ApplicationDbContext> options;
 
         public CommentsServiceTests()
         {
@@ -24,14 +25,14 @@
                 MovieId = 1,
                 ReviewId = 1,
             };
+            this.options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString());
         }
 
         [Fact]
         public async Task AddCommentShouldAddCorrectCount()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 
@@ -42,9 +43,7 @@
         [Fact]
         public async Task AddCommentShouldAddCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 
@@ -58,9 +57,7 @@
         [Fact]
         public async Task EditCommentShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 
@@ -82,9 +79,7 @@
         [Fact]
         public async Task EditCommentShouldThrowWithInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 
@@ -104,9 +99,7 @@
         [Fact]
         public async Task DeleteCommentShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 
@@ -121,9 +114,7 @@
         [Fact]
         public void DeleteCommentShouldThrowWithInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 
@@ -133,9 +124,7 @@
         [Fact]
         public async Task GetByReviewIdShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 
@@ -148,9 +137,7 @@
         [Fact]
         public async Task GetByReviewIdShouldReturnEmptyListWithInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
 

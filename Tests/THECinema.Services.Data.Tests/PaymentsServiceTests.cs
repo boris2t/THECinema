@@ -14,12 +14,18 @@
 
     public class PaymentsServiceTests
     {
+        private readonly DbContextOptionsBuilder<ApplicationDbContext> options;
+
+        public PaymentsServiceTests()
+        {
+            this.options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString());
+        }
+
         [Fact]
         public async Task AddPaymentShouldAddCorrectCount()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Payment>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Payment>(new ApplicationDbContext(this.options.Options));
             var service = new PaymentsService(repository);
 
             var payment = new PaymentTypeInputModel
@@ -35,9 +41,7 @@
         [Fact]
         public async Task AddPaymentShouldAddCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var repository = new EfDeletableEntityRepository<Payment>(new ApplicationDbContext(options.Options));
+            var repository = new EfDeletableEntityRepository<Payment>(new ApplicationDbContext(this.options.Options));
             var service = new PaymentsService(repository);
 
             var payment = new PaymentTypeInputModel

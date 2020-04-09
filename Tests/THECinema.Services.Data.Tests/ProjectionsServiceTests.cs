@@ -18,6 +18,7 @@
     public class ProjectionsServiceTests
     {
         private readonly AddProjectionInputModel projection;
+        private readonly DbContextOptionsBuilder<ApplicationDbContext> options;
 
         public ProjectionsServiceTests()
         {
@@ -28,14 +29,14 @@
                 ProjectionDateTime = new DateTime(2008, 4, 10),
             };
             AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
+            this.options = new DbContextOptionsBuilder<ApplicationDbContext>()
+               .UseInMemoryDatabase(Guid.NewGuid().ToString());
         }
 
         [Fact]
         public async Task AddProjectionShouldAddCorrectCount()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -46,9 +47,7 @@
         [Fact]
         public async Task AddProjectionShouldAddCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -62,9 +61,7 @@
         [Fact]
         public async Task DeleteProjectionShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -79,9 +76,7 @@
         [Fact]
         public void DeleteProjectionShouldThrowIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -91,9 +86,7 @@
         [Fact]
         public async Task EditeProjectionShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -118,9 +111,7 @@
         [Fact]
         public void EditProjectionShouldThrowIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -138,9 +129,7 @@
         [Fact]
         public async Task GetAllShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -155,9 +144,7 @@
         [Fact]
         public async Task GetAllShouldReturnCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -173,9 +160,7 @@
         [Fact]
         public async Task GetByIdShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -198,9 +183,7 @@
         [Fact]
         public void GetByIdShouldReturnNullIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -213,9 +196,7 @@
         [Fact]
         public async Task GetByProjectionIdShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
@@ -239,9 +220,7 @@
         [Fact]
         public void GetByProjectionIdShouldReturnNullIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 

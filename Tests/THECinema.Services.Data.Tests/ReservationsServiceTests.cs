@@ -21,6 +21,7 @@
     public class ReservationsServiceTests
     {
         private readonly Reservation reservation;
+        private readonly DbContextOptionsBuilder<ApplicationDbContext> options;
 
         public ReservationsServiceTests()
         {
@@ -31,14 +32,15 @@
                 ProjectionId = "projectionId",
                 ApplicationUserId = "f00",
             };
+
+            this.options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString());
         }
 
         [Fact]
         public async Task AddShouldAddCorrectCount()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -49,9 +51,7 @@
         [Fact]
         public async Task AddShouldAddCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -68,9 +68,7 @@
         [Fact]
         public async Task DeleteShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -90,9 +88,7 @@
         [Fact]
         public void DeleteShouldThrowIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -102,9 +98,7 @@
         [Fact]
         public async Task GetByIdShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -129,9 +123,7 @@
         [Fact]
         public async Task GetByIdShouldReturnNullIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -143,9 +135,7 @@
         [Fact]
         public async Task GetDetailsShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -166,9 +156,7 @@
         [Fact]
         public void GetDetailsShouldReturnNullIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -179,9 +167,7 @@
         [Fact]
         public async Task GetReservationByUserIdShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -200,9 +186,7 @@
         [Fact]
         public async Task GetReservationByUserIdShouldReturnEmptyListIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -220,9 +204,7 @@
         [Fact]
         public void GetSeatIdsShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 
@@ -234,9 +216,7 @@
         [Fact]
         public void GetSeatIdsShouldReturnEmptyListIfReservationIdIsInvalid()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Reservation>(context);
             var service = this.GetReservationsService(repository, context);
 

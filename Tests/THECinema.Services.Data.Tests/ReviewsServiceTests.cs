@@ -18,6 +18,7 @@
     public class ReviewsServiceTests
     {
         private readonly AddReviewInputModel review;
+        private readonly DbContextOptionsBuilder<ApplicationDbContext> options;
 
         public ReviewsServiceTests()
         {
@@ -31,14 +32,14 @@
             };
 
             AutoMapperConfig.RegisterMappings(typeof(TestReviewViewModel).Assembly);
+            this.options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString());
         }
 
         [Fact]
         public async Task AddReviewShouldAddCorrectCount()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
@@ -49,9 +50,7 @@
         [Fact]
         public async Task AddReviewShouldAddCorrectData()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
@@ -63,9 +62,7 @@
         [Fact]
         public async Task DeleteReviewShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
@@ -79,9 +76,7 @@
         [Fact]
         public void DeleteReviewShouldThrowIfInvalidId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
@@ -91,9 +86,7 @@
         [Fact]
         public async Task EditReviewShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
@@ -115,9 +108,7 @@
         [Fact]
         public void EditReviewShouldThrowIfIdIsInvalid()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
@@ -127,9 +118,7 @@
         [Fact]
         public async Task GetAllByMovieIdShouldWorkCorrectly()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
@@ -154,9 +143,7 @@
         [Fact]
         public async Task GetAllByMovieIdShouldReturnEmptyListWithInvalidMovieId()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString());
-            var context = new ApplicationDbContext(options.Options);
+            var context = new ApplicationDbContext(this.options.Options);
             var repository = new EfDeletableEntityRepository<Review>(context);
             var service = this.GetReviewsService(repository);
 
