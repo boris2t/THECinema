@@ -256,6 +256,8 @@
         }, 500);
     }
 
+    var token = $("#writeReviewForm input[name=__RequestVerificationToken]").val();
+
     function AddComment(formId, commentId) {
         event.preventDefault();
         $("#" + formId).hide();
@@ -268,6 +270,7 @@
             type: "POST",
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: "json",
+            headers: { 'X-CSRF-TOKEN': token },
             data: data,
             complete: function (data) {
                 var parsedData = JSON.parse(data.responseText)
@@ -334,6 +337,7 @@
             type: "POST",
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: "json",
+            headers: { 'X-CSRF-TOKEN': token },
             data: data,
             complete: function (data) {
                 var parsedData = JSON.parse(data.responseText)
@@ -436,6 +440,7 @@
             type: "POST",
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: "json",
+            headers: { 'X-CSRF-TOKEN': token },
             data: data,
             complete: function (data) {
                 var parsedData = JSON.parse(data.responseText)
@@ -485,6 +490,7 @@
             type: "POST",
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: "json",
+            headers: { 'X-CSRF-TOKEN': token },
             data: data,
             complete: function (data) {
                 var parsedData = JSON.parse(data.responseText)
@@ -542,7 +548,6 @@
         });
     }
 
-
     function Delete(cardId, Id, type) {
         event.preventDefault();
 
@@ -560,6 +565,7 @@
             type: "POST",
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: "json",
+            headers: { 'X-CSRF-TOKEN': token },
             data: data,
             complete: function (data) {
                 $("#" + cardId).hide();
