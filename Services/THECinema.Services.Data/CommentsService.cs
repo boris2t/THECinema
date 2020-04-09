@@ -11,6 +11,8 @@
 
     public class CommentsService : ICommentsService
     {
+        private const string InvalidIdExceptionMessage = "Comment doesn't exist!";
+
         private readonly IDeletableEntityRepository<Comment> commentsRepository;
 
         public CommentsService(IDeletableEntityRepository<Comment> commentsRepository)
@@ -46,7 +48,7 @@
 
             if (comment == null)
             {
-                throw new ArgumentNullException("Comment doesn't exist!");
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
             }
 
             this.commentsRepository.Delete(comment);
@@ -59,7 +61,7 @@
 
             if (comment == null)
             {
-                throw new ArgumentNullException("Comment doesn't exist!");
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
             }
 
             comment.Content = inputModel.Content;

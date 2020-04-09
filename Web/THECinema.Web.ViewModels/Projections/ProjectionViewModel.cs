@@ -10,23 +10,21 @@
     {
         public ProjectionViewModel()
         {
-            switch (this.ProjectionType)
+            this.Type = this.ProjectionType switch
             {
-                case "TwoD":
-                    this.Type = "2D";
-                    break;
-                case "ThreeD":
-                    this.Type = "3D";
-                    break;
-                default:
-                    this.Type = "4Dx";
-                    break;
-            }
+                "TwoD" => "2D",
+                "ThreeD" => "3D",
+                _ => "4Dx",
+            };
         }
 
         public string Id { get; set; }
 
+        public int HallId { get; set; }
+
         public Hall Hall { get; set; }
+
+        public int MovieId { get; set; }
 
         public Movie Movie { get; set; }
 

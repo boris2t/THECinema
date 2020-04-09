@@ -13,6 +13,8 @@
 
     public class MoviesService : IMoviesService
     {
+        private const string InvalidIdExceptionMessage = "Movie doesn't exist!";
+
         private readonly IDeletableEntityRepository<Movie> moviesRepository;
 
         public MoviesService(IDeletableEntityRepository<Movie> moviesRepository)
@@ -49,7 +51,7 @@
 
             if (movie == null)
             {
-                throw new ArgumentNullException("Movie doesn't exist!");
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
             }
 
             this.moviesRepository.Delete(movie);
@@ -62,7 +64,7 @@
 
             if (movie == null)
             {
-                throw new ArgumentNullException("Movie doesn't exist!");
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
             }
 
             movie.Name = inputModel.Name;

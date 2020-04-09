@@ -25,11 +25,11 @@
             this.userManager = userManager;
         }
 
-        public async Task<IActionResult> Details(string projectionId)
+        public IActionResult Details(string projectionId)
         {
             var viewModel = new CombinedReservationViewModel
             {
-                ViewModel = await this.reservationsService.GetDetailsAsync(projectionId),
+                ViewModel = this.reservationsService.GetDetails(projectionId),
                 InputModel = new ReservationInputModel(),
             };
 

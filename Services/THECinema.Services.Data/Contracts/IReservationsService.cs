@@ -7,7 +7,7 @@
 
     public interface IReservationsService
     {
-        Task<ReservationViewModel> GetDetailsAsync(string projectionId);
+        ReservationViewModel GetDetails(string projectionId);
 
         Task<string> AddAsync(string selectedSeats, double price, string projectionId, string userId);
 

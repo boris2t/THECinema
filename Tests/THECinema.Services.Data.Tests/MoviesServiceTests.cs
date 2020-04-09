@@ -37,6 +37,7 @@
                 TrailerUrl = "url",
                 TrailerVideoUrl = "url",
             };
+            AutoMapperConfig.RegisterMappings(typeof(TestMovieViewModel).Assembly);
         }
 
         [Fact]
@@ -137,16 +138,13 @@
         }
 
         [Fact]
-        public async Task GetByIdShouldReturnNull()
+        public void GetByIdShouldReturnNull()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                  .UseInMemoryDatabase(Guid.NewGuid().ToString());
             var repository = new EfDeletableEntityRepository<Movie>(new ApplicationDbContext(options.Options));
             var service = new MoviesService(repository);
 
-            await service.AddAsync(this.movie);
-
-            AutoMapperConfig.RegisterMappings(typeof(TestMovieViewModel).Assembly);
             var result = service.GetById<TestMovieViewModel>(5);
 
             Assert.Null(result);
@@ -163,7 +161,6 @@
             await service.AddAsync(this.movie);
             await service.AddAsync(this.movie);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestMovieViewModel).Assembly);
             var result = service.GetAll<TestMovieViewModel>(null);
 
             Assert.Equal(2, result.Count());
@@ -181,7 +178,6 @@
             await service.AddAsync(this.movie);
             await service.AddAsync(this.movie);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestMovieViewModel).Assembly);
             var result = service.GetAll<TestMovieViewModel>(1);
 
             Assert.Single(result);
@@ -216,7 +212,6 @@
             await service.AddAsync(diffMovie);
             await service.AddAsync(this.movie);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestMovieViewModel).Assembly);
             var result = service.GetAll<TestMovieViewModel>(1, 1);
 
             Assert.Single(result);

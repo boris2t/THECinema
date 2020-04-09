@@ -63,7 +63,7 @@
             var context = new ApplicationDbContext(options.Options);
             var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
             var commentsService = new CommentsService(commentsRepository);
- 
+
             await commentsService.AddAsync(this.comment);
 
             var diffComment = new AddCommentInputModel

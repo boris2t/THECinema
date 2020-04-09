@@ -14,6 +14,8 @@
 
     public class HallsService : IHallsService
     {
+        private const string InvalidIdExceptionMessage = "Hall doesn't exist!";
+
         private readonly IDeletableEntityRepository<Hall> hallsRepository;
 
         public HallsService(IDeletableEntityRepository<Hall> hallsRepository)
@@ -52,7 +54,7 @@
 
             if (hall == null)
             {
-                throw new ArgumentNullException("The Hall doesn't exist!");
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
             }
 
             this.hallsRepository.Delete(hall);

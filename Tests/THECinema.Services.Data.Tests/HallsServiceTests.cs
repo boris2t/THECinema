@@ -25,6 +25,8 @@
                 ProjectionType = "TwoD",
                 Seats = 50,
             };
+
+            AutoMapperConfig.RegisterMappings(typeof(TestHallViewModel).Assembly);
         }
 
         [Fact]
@@ -92,7 +94,6 @@
             await service.AddAsync(this.hall);
             await service.AddAsync(this.hall);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestHallViewModel).Assembly);
             var result = service.GetAll<TestHallViewModel>();
 
             Assert.Equal(2, result.Count());
@@ -107,7 +108,6 @@
             var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
             var service = new HallsService(repository);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestHallViewModel).Assembly);
             var result = service.GetAll<TestHallViewModel>();
 
             Assert.Empty(result);
@@ -130,7 +130,6 @@
             await service.AddAsync(this.hall);
             await service.AddAsync(diffHall);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestHallViewModel).Assembly);
             var result = service.GetById<TestHallViewModel>(2);
 
             Assert.Equal(ProjectionType.FourDx, result.ProjectionType);
@@ -144,7 +143,6 @@
             var repository = new EfDeletableEntityRepository<Hall>(new ApplicationDbContext(options.Options));
             var service = new HallsService(repository);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestHallViewModel).Assembly);
             var result = service.GetById<TestHallViewModel>(2);
 
             Assert.Null(result);
