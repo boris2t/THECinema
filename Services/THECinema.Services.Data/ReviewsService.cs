@@ -1,5 +1,6 @@
 ﻿namespace THECinema.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -8,15 +9,20 @@
     using THECinema.Data.Models;
     using THECinema.Services.Data.Contracts;
     using THECinema.Services.Mapping;
+    using THECinema.Web.ViewModels.Comments;
     using THECinema.Web.ViewModels.Reviews;
 
     public class ReviewsService : IReviewsService
     {
         private readonly IDeletableEntityRepository<Review> reviewsRepository;
+        private readonly IDeletableEntityRepository<Comment> commentsRepository;
 
-        public ReviewsService(IDeletableEntityRepository<Review> reviewsRepository)
+        public ReviewsService(
+            IDeletableEntityRepository<Review> reviewsRepository,
+            IDeletableEntityRepository<Comment> commentsRepository)
         {
             this.reviewsRepository = reviewsRepository;
+            this.commentsRepository = commentsRepository;
         }
 
         public async Task<ReviewViewModel> AddAsync(AddReviewInputModel inputModel)
@@ -45,11 +51,34 @@
             return viewModel;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<CommentsForDeleteViewModel> DeleteAsync(int id)
         {
             var review = this.reviewsRepository.All().Where(r => r.Id == id).FirstOrDefault();
+
+            if (review == null)
+            {
+                throw new ArgumentNullException("The review doesn't exist!");
+            }
+
+            var comments = this.commentsRepository.All().Where(c => c.ReviewId == review.Id).ToList();
+            var commentIds = new List<int>();
+
+            foreach (var comment in comments)
+            {
+                commentIds.Add(comment.Id);
+                this.commentsRepository.Delete(comment);
+            }
+
             this.reviewsRepository.Delete(review);
             await this.reviewsRepository.SaveChangesAsync();
+            await this.commentsRepository.SaveChangesAsync();
+
+            var viewModel = new CommentsForDeleteViewModel
+            {
+                CommentIds = commentIds,
+            };
+
+            return viewModel;
         }
 
         public async Task<ReviewViewModel> EditAsync(AddReviewInputModel inputModel)

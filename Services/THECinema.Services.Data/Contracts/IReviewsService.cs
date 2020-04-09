@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
+    using THECinema.Web.ViewModels.Comments;
     using THECinema.Web.ViewModels.Reviews;
 
     public interface IReviewsService
@@ -11,7 +12,7 @@
 
         IEnumerable<T> GetAllByMovieId<T>(int movieId);
 
-        Task DeleteAsync(int id);
+        Task<CommentsForDeleteViewModel> DeleteAsync(int id);
 
         Task<ReviewViewModel> EditAsync(AddReviewInputModel inputModel);
     }

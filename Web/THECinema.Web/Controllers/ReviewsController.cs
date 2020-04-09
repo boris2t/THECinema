@@ -1,5 +1,6 @@
 ﻿namespace THECinema.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using THECinema.Data.Models;
     using THECinema.Services.Data.Contracts;
+    using THECinema.Web.ViewModels.Comments;
     using THECinema.Web.ViewModels.Reviews;
 
     [Authorize]
@@ -34,10 +36,10 @@
             return viewModel;
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<CommentsForDeleteViewModel>> Delete(int id)
         {
-            await this.reviewsService.DeleteAsync(id);
-            return this.Ok();
+            var commentIds = await this.reviewsService.DeleteAsync(id);
+            return commentIds;
         }
 
         [HttpPost]

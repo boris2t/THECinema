@@ -561,8 +561,14 @@
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: "json",
             data: data,
-            complete: function () {
-            $("#" + cardId).hide();
+            complete: function (data) {
+                $("#" + cardId).hide();
+                try {
+                    var parsedData = JSON.parse(data.responseText);
+                    if (parsedData.commentIds.length > 0) {
+                        parsedData.commentIds.forEach(id => $("#commentCard" + id).hide());
+                    }
+                } catch (e) {}
         }
     });
     }
