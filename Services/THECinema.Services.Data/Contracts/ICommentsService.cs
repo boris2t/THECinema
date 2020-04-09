@@ -1,5 +1,6 @@
 ﻿namespace THECinema.Services.Data.Contracts
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     using THECinema.Web.ViewModels.Comments;
@@ -11,5 +12,7 @@
         Task DeleteAsync(int id);
 
         Task<CommentViewModel> EditAsync(AddCommentInputModel inputModel);
+
+        IEnumerable<int> GetByReviewId(int reviewId);
     }
 }

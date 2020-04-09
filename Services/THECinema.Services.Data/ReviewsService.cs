@@ -17,14 +17,14 @@
         private const string InvalidIdExceptionMessage = "Review doesn't exist!";
 
         private readonly IDeletableEntityRepository<Review> reviewsRepository;
-        private readonly IDeletableEntityRepository<Comment> commentsRepository;
+        private readonly ICommentsService commentsService;
 
         public ReviewsService(
             IDeletableEntityRepository<Review> reviewsRepository,
-            IDeletableEntityRepository<Comment> commentsRepository)
+            ICommentsService commentsService)
         {
             this.reviewsRepository = reviewsRepository;
-            this.commentsRepository = commentsRepository;
+            this.commentsService = commentsService;
         }
 
         public async Task<ReviewViewModel> AddAsync(AddReviewInputModel inputModel)
@@ -62,18 +62,15 @@
                 throw new ArgumentNullException(InvalidIdExceptionMessage);
             }
 
-            var comments = this.commentsRepository.All().Where(c => c.ReviewId == review.Id).ToList();
-            var commentIds = new List<int>();
+            var commentIds = this.commentsService.GetByReviewId(id);
 
-            foreach (var comment in comments)
+            foreach (var commentId in commentIds)
             {
-                commentIds.Add(comment.Id);
-                this.commentsRepository.Delete(comment);
+                await this.commentsService.DeleteAsync(commentId);
             }
 
             this.reviewsRepository.Delete(review);
             await this.reviewsRepository.SaveChangesAsync();
-            await this.commentsRepository.SaveChangesAsync();
 
             var viewModel = new CommentsForDeleteViewModel
             {

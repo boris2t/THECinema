@@ -9,17 +9,13 @@
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using THECinema.Data;
-    using THECinema.Data.Common.Repositories;
     using THECinema.Data.Models;
     using THECinema.Data.Models.Enums;
     using THECinema.Data.Repositories;
     using THECinema.Services.Data.Contracts;
-    using THECinema.Services.Data.Tests.TestModels;
-    using THECinema.Services.Mapping;
     using THECinema.Web.ViewModels.Halls;
     using THECinema.Web.ViewModels.Movies;
     using THECinema.Web.ViewModels.Projections;
-    using THECinema.Web.ViewModels.Reservations;
     using Xunit;
 
     public class ReservationsServiceTests

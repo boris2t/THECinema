@@ -8,7 +8,6 @@
     using Microsoft.EntityFrameworkCore;
     using Moq;
     using THECinema.Data;
-    using THECinema.Data.Common.Repositories;
     using THECinema.Data.Models;
     using THECinema.Data.Repositories;
     using THECinema.Services.Data.Tests.TestModels;
@@ -28,6 +27,7 @@
                 MovieId = 1,
                 ProjectionDateTime = new DateTime(2008, 4, 10),
             };
+            AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
         }
 
         [Fact]
@@ -147,7 +147,6 @@
             await service.AddAsync(this.projection);
             await service.AddAsync(this.projection);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
             var result = service.GetAll<TestProjectionViewModel>();
 
             Assert.Equal(2, result.Count());
@@ -165,7 +164,6 @@
             await service.AddAsync(this.projection);
             await service.AddAsync(this.projection);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
             var result = service.GetAll<TestProjectionViewModel>();
 
             var dbProjection = result.FirstOrDefault();
@@ -191,7 +189,6 @@
             await service.AddAsync(diffProjection);
             await service.AddAsync(this.projection);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
             var result = service.GetById<TestProjectionViewModel>(3);
 
             var dbProjection = result.FirstOrDefault();
@@ -207,7 +204,6 @@
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
             var result = service.GetById<TestProjectionViewModel>(5);
 
             var dbProjection = result.FirstOrDefault();
@@ -234,7 +230,6 @@
             await service.AddAsync(this.projection);
             var id = repository.All().Select(p => p.Id).FirstOrDefault();
 
-            AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
             var result = service.GetByProjectionId<TestProjectionViewModel>(id);
 
             Assert.Equal(2, result.HallId);
@@ -250,7 +245,6 @@
             var repository = new EfDeletableEntityRepository<Projection>(context);
             var service = this.GetProjectionsService(repository, context);
 
-            AutoMapperConfig.RegisterMappings(typeof(TestProjectionViewModel).Assembly);
             var result = service.GetByProjectionId<TestProjectionViewModel>("Invalid");
 
             Assert.Null(result);

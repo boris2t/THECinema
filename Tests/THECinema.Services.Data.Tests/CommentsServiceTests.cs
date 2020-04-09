@@ -129,5 +129,35 @@
 
             Assert.Throws<ArgumentNullException>(() => commentsService.DeleteAsync(1).GetAwaiter().GetResult());
         }
+
+        [Fact]
+        public async Task GetByReviewIdShouldWorkCorrectly()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
+            var context = new ApplicationDbContext(options.Options);
+            var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
+            var commentsService = new CommentsService(commentsRepository);
+
+            await commentsService.AddAsync(this.comment);
+            var commentIds = commentsService.GetByReviewId(1);
+
+            Assert.Single(commentIds);
+        }
+
+        [Fact]
+        public async Task GetByReviewIdShouldReturnEmptyListWithInvalidId()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
+            var context = new ApplicationDbContext(options.Options);
+            var commentsRepository = new EfDeletableEntityRepository<Comment>(context);
+            var commentsService = new CommentsService(commentsRepository);
+
+            await commentsService.AddAsync(this.comment);
+            var commentIds = commentsService.GetByReviewId(2);
+
+            Assert.Empty(commentIds);
+        }
     }
 }
