@@ -13,6 +13,8 @@
 
     public class ProjectionsService : IProjectionsService
     {
+        private const string InvalidIdExceptionMessage = "The Projection doesn't exist!";
+
         private readonly IDeletableEntityRepository<Projection> projectionsRepository;
         private readonly IDeletableEntityRepository<ProjectionSeat> projectionsSeatsRepo;
         private readonly IDeletableEntityRepository<Seat> seatsRepository;
@@ -64,6 +66,12 @@
         public async Task DeleteAsync(string id)
         {
             var projection = this.projectionsRepository.All().Where(p => p.Id == id).FirstOrDefault();
+
+            if (projection == null)
+            {
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
+            }
+
             this.projectionsRepository.Delete(projection);
             await this.projectionsRepository.SaveChangesAsync();
         }
@@ -71,6 +79,11 @@
         public async Task EditAsync(AddProjectionInputModel inputModel)
         {
             var projection = await this.projectionsRepository.GetByIdWithDeletedAsync(inputModel.Id);
+
+            if (projection == null)
+            {
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
+            }
 
             if (projection.HallId != inputModel.HallId)
             {

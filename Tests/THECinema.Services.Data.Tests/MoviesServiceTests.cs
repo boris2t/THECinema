@@ -11,6 +11,7 @@
     using THECinema.Data.Common.Repositories;
     using THECinema.Data.Models;
     using THECinema.Data.Repositories;
+    using THECinema.Services.Data.Tests.TestModels;
     using THECinema.Services.Mapping;
     using THECinema.Web.ViewModels.Movies;
     using Xunit;

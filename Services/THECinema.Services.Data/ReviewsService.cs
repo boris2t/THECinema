@@ -14,6 +14,8 @@
 
     public class ReviewsService : IReviewsService
     {
+        private const string InvalidIdExceptionMessage = "Review doesn't exist!";
+
         private readonly IDeletableEntityRepository<Review> reviewsRepository;
         private readonly IDeletableEntityRepository<Comment> commentsRepository;
 
@@ -57,7 +59,7 @@
 
             if (review == null)
             {
-                throw new ArgumentNullException("The review doesn't exist!");
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
             }
 
             var comments = this.commentsRepository.All().Where(c => c.ReviewId == review.Id).ToList();
@@ -84,6 +86,11 @@
         public async Task<ReviewViewModel> EditAsync(AddReviewInputModel inputModel)
         {
             var review = await this.reviewsRepository.GetByIdWithDeletedAsync(inputModel.Id);
+
+            if (review == null)
+            {
+                throw new ArgumentNullException(InvalidIdExceptionMessage);
+            }
 
             review.Title = inputModel.Title;
             review.Content = inputModel.Content;

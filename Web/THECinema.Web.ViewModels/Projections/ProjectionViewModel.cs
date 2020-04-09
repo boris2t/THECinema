@@ -35,7 +35,5 @@
         public string Type { get; set; }
 
         public DateTime ProjectionDateTime { get; set; }
-
-        //public DateTime Time => DateTime.ParseExact(this.ProjectionDateTime.ToShortTimeString(), "hh:mm tt", CultureInfo.InvariantCulture);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace THECinema.Services.Data.Tests
+﻿namespace THECinema.Services.Data.Tests.TestModels
 {
     using THECinema.Data.Models;
     using THECinema.Services.Mapping;
