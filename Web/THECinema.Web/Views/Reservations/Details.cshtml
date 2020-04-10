@@ -107,13 +107,13 @@
 
 <script>
     function takeData() {
-    if (($("#numseats").val().length == 0)) {
-        alert("Please Enter Number of Seats");
-    } else {
-        $(".inputForm *").prop("disabled", true);
-        $(".seatStructure *").prop("disabled", false);
-        $(".taken *").prop("disabled", true);
-        $("#price").val('$' + (@Model.ViewModel.Movie.Price * ($("#numseats").val())) + '.00');
-    }
+        if (($("#numseats").val() < 1)) {
+            alert("Please Enter Number of Seats");
+        } else {
+            $(".inputForm *").prop("disabled", true);
+            $(".seatStructure *").prop("disabled", false);
+            $(".taken *").prop("disabled", true);
+            $("#price").val('$' + (@Model.ViewModel.Movie.Price * ($("#numseats").val())) + '.00');
+        }
 }
 </script>
